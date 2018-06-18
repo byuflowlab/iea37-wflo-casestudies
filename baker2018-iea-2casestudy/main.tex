@@ -44,11 +44,12 @@
 \tableofcontents
 
 \section{Introduction}
-    In order to better understand the differences in Engineering Wake Model (EMW) selection and optimization algorithm implementation, this document defines two simple wind farm layout optimization (WFLO) case studies. These studies are designed to involve participants from many different research labs working on the WFLO problem.
+
+In order to better understand the differences in Engineering Wake Model (EWM) selection and optimization algorithm implementation, this document defines two simple wind farm layout optimization (WFLO) case studies. These studies are designed to involve a broad spectrum of participants working on the WFLO problem.
     
-    Since two of the major factors contributing to superior wind farm turbine placement recommendations are 1) EWM characteristics and 2) optimization algorithm implementation, the two distinct case studies are designed in an attempt to quantify the effects of alterations in both variables. The first case study isolates optimization techniques for a single simplified EWM, the second observes the differences when combining variations in EWM selection and optimization method.
+    Since two of the major factors contributing to superior wind farm turbine placement recommendations are 1) EWM characteristics and 2) optimization algorithm implementation, the two distinct case studies are designed in an attempt to quantify the effects of alterations in both variables. The first case study isolates optimization techniques for a single simplified EWM, the second observes the differences when combining variations in EWM selection and optimization method.\footnote{Comparisons just between EWMs does not involve optimization and multiple studies already exist in this area.}
     
-    To isolate optimization method variability, we have pre-coded a representative wake model as a control variable, and permit participants to use any optimization strategy they think will achieve the maximum Annual Energy Production (AEP) for the specified wind farm. This will be called the Optimization Only Case Study, and is described below in \cref{Sec:OptOnly}.
+    To isolate optimization method variability, we have implemented a representative wake model, and permit participants to use any optimization strategy they think will achieve the maximum Annual Energy Production (AEP) for the specified wind farm. This will be called the Optimization Only Case Study, and is described below in \cref{Sec:OptOnly}.
     
     Since an EWM's compatibility with gradient-based or gradient-free optimization methods dictate which algorithms can be applied, designing a case study which restricts participants to a single optimization algorithm would unnecessarily limit the scope of EWMs studied. With the aim of acquiring as much empirical data in order to determine best practices for the industry as a whole, our second case study will permit participant selection of not only EWM, but also implemented optimization algorithm. It will be called the Combined Physics Model/Optimization Algorithm Case Study, and is described below in \cref{Sec:Cmbnd}.
     
@@ -57,11 +58,12 @@
 %\newpage
 \section{Problem Definitions}
 \subsection{The Optimization Only Case Study}\label{Sec:OptOnly}
-    The intent of this case study is to determine best optimization practices when given an EWM that permits both gradient-based and gradient free methods to be used. As a representative EWM, we select a simplified version of Bastankhah's Gaussian wake model \cite{Thomas2018,Bastankhah2014,Bastankhah2016}. We supply a Python implementation of this wake model, as well as a description of the model's governing factors in \cref{app:WakeModel} for those who wish to implement it in another language.
+    The intent of this case study is to determine best optimization practices when given an EWM that permits both gradient-based and gradient-free methods to be used. As a representative EWM, we select a simplified version of Bastankhah's Gaussian wake model \cite{Thomas2018,Bastankhah2014,Bastankhah2016}. We supply a Python implementation of this wake model, as well as a description of the model in \cref{app:WakeModel} for those who wish to implement it in another language.
     %Reword above and below paragraphs to clarify AEP calculation is defined.
-    With the wake model characteristics as a control variable, participants are directed to use whichever computational optimization strategies they choose, with the objective of obtaining the maximum Annual Energy Production (AEP) for the defined turbine farms. Participants will adjust resultant AEP exclusively by manipulating turbine locations. In this case study the wind farm boundaries, directional wind frequency, wind turbine attributes, and wake model physics are fixed - turbine locations are the only design variable participants are permitted to alter.
+
+    With the wake model fixed, participants are free to use whichever computational optimization strategies they choose, with the objective of obtaining the maximum Annual Energy Production (AEP) for the defined farm. In this case study the wind farm boundaries, directional wind frequency, wind turbine attributes, and wake model physics are fixed---turbine locations are the only design variable participants are permitted to alter.
     
-    Since some sizing and complexity variability effects optimization algorithm performance, three wind farms of increasing sizes are specified in \cref{Sec:OptWindFarm}. These size scenarios, roughly doubling in number of turbines, exist to avoid a bias towards algorithms optimized for wind farms of a specific dimension, and in order to observe how increased complexity correlates to algorithm performance. Perfect squares are used to permit grid turbine arrangements, if desired.
+    Since problem size strongly affects optimization algorithm performance, three wind farms of increasing size are specified in \cref{Sec:OptWindFarm}. These scenarios, roughly doubling in number of turbines, exist to avoid a bias towards algorithms optimized for wind farms of a specific dimension, and in order to observe how increased complexity correlates to algorithm performance. Perfect squares are used to permit grid turbine arrangements, if desired.
     
     The goal of this collaboration is to compare participant results when using different optimization strategies under a single wake model, in order to understand the performance differences resulting from optimization algorithm selection in similar scenarios. While the provided wind farm scenarios are very simple, we expect the results to assist researchers in understanding the differences that occur in WFLO due to various numerical methods. A greater understanding of the trade-offs in algorithm selection for this simplified problem is expected to aid in solving and interpreting the results of more complex and realistic problems.
 
@@ -79,7 +81,7 @@ There are three (3) wind farm size scenarios which will be optimized by all part
     
     For all wind farm sizes, the wind farm boundary is circular, as depicted \cref{fig:EmptyFarm}. The origin is at the center of the farm, coincident with the depicted reference turbine, and the specified boundary radius for each farm is measured from the origin. The radii magnitudes were determined by evenly distributing the specified number of turbines in concentric circles, with no less than 5 diameter spacing between adjacent turbines, and rounding up to the nearest 100 m.
     
-    All wind farms will be populated with NREL 3.35 MW onshore reference turbine \cite{NREL335MW}, whose main attributes are summarized in \cref{App:NREL335MW}
+    All wind farms will be populated with the IEA37 3.35 MW onshore reference turbine \cite{NREL335MW}, whose main attributes are summarized in \cref{App:NREL335MW}
     
     Note that the farm boundary restricts only turbine hub locations. The blade radius is permitted to extend beyond, but hub locations must be on or within the boundary. Hub locations are further restricted from being placed closer to each other than two diameters apart.
     
@@ -130,7 +132,7 @@ You are also to conduct a single baseline optimization from these baseline layou
         %\item Assume the freestream wind speeds given in this document are at hub height. If you need a wind shear, use a power law relationship with a shear exponent of 0.15.
 
 \subsubsection{Wake Model and Code Description}
-The wake model implemented in this case study is Bastankhah?s Gaussian wake model \cite{Thomas2018, Bastankhah2014, Bastankhah2016}. A description of the model's governing equations, data on the wind farm's wind speed and direction probability, and formulations for AEP calculations are included in \cref{app:WakeModel}. The pertinent equations are coded in Python, and are provided alongside this document in a \texttt{.zip} directory, in order for each participant to focus on the optimization aspect and apply their unique methods.
+The wake model implemented in this case study is Bastankhah's Gaussian wake model \cite{Thomas2018, Bastankhah2014, Bastankhah2016}. A description of the model's governing equations, data on the wind farm's wind speed and direction probability, and formulations for AEP calculations are included in \cref{app:WakeModel}. The pertinent equations are coded in Python, and are provided alongside this document in a \texttt{.zip} directory, in order for each participant to focus on the optimization aspect and apply their unique methods.
 
 The wake model routine takes turbine grid locations as inputs, and returns as output a single AEP value calculated from the input turbine locations.
 
