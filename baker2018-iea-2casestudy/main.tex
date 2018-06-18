@@ -130,7 +130,7 @@ You are also to conduct a single baseline optimization from these baseline layou
         %\item Assume the freestream wind speeds given in this document are at hub height. If you need a wind shear, use a power law relationship with a shear exponent of 0.15.
 
 \subsubsection{Wake Model and Code Description}
-The wake model implemented in this case study is Bastankhah’s Gaussian wake model \cite{Thomas2018, Bastankhah2014, Bastankhah2016}. A description of the model's governing equations, data on the wind farm's wind speed and direction probability, and formulations for AEP calculations are included in \cref{app:WakeModel}. The pertinent equations are coded in Python, and are provided alongside this document in a \texttt{.zip} directory, in order for each participant to focus on the optimization aspect and apply their unique methods.
+The wake model implemented in this case study is Bastankhah?s Gaussian wake model \cite{Thomas2018, Bastankhah2014, Bastankhah2016}. A description of the model's governing equations, data on the wind farm's wind speed and direction probability, and formulations for AEP calculations are included in \cref{app:WakeModel}. The pertinent equations are coded in Python, and are provided alongside this document in a \texttt{.zip} directory, in order for each participant to focus on the optimization aspect and apply their unique methods.
 
 The wake model routine takes turbine grid locations as inputs, and returns as output a single AEP value calculated from the input turbine locations.
 
@@ -258,16 +258,15 @@ You will submit a \texttt{.txt} file containing a short description of your meth
         \texttt{\# AEP (MWh)}\newline
         \texttt{AEP}\newline
         
-        \texttt{\# turb num, x\_coord(m), y\_coord(m)}\newline
-        \texttt{0, x0, y0}\newline
-        \texttt{1, x1, y1}\newline
-        \texttt{2, x2, y2}\newline
-        \texttt{3, x3, y3}\newline
-        \texttt{4, x4, y4}\newline
-        \texttt{5, x5, y5}\newline
-        \texttt{6, x6, y6}\newline
+        \texttt{x\_coord(m), y\_coord(m)}\newline
+        \texttt{x0, y0}\newline
+        \texttt{x1, y1}\newline
+        \texttt{x2, y2}\newline
+        \texttt{x3, y3}\newline
+        \texttt{x4, y4}\newline
+        \texttt{x5, y5}\newline
+        \texttt{x6, y6}\newline
         \texttt{\vdots,
-                \ \vdots, 
                 \ \vdots}
     \end{minipage}}
     \caption{\texttt{.csv} file example for reporting turbine locations}
@@ -317,7 +316,7 @@ You will submit a \texttt{.txt} file containing a short description of your meth
     \begin{figure}[H]
         \centering
         \caption{Calculated NREL 3.35MW onshore reference turbine power curve \label{Fig:curve}}
-        \includegraphics[width=0.75\linewidth]{power-curve.png}
+        \includegraphics[width=0.75\linewidth]{power-curve.eps}
     \end{figure}
 
 \newpage
@@ -414,9 +413,9 @@ You will submit a \texttt{.txt} file containing a short description of your meth
     \label{Eq:CmbndWake}
         \bigg(\frac{\Delta U}{U_{\infty}}\bigg)_{cmbnd} = 
             \sqrt{
-                \bigg(\frac{\Delta U}{U_{\infty}}\bigg)_1 +
-                \bigg(\frac{\Delta U}{U_{\infty}}\bigg)_2 +
-                \bigg(\frac{\Delta U}{U_{\infty}}\bigg)_3 +
+                \bigg(\frac{\Delta U}{U_{\infty}}\bigg)_{1}^{2} +
+                \bigg(\frac{\Delta U}{U_{\infty}}\bigg)_{2}^{2} +
+                \bigg(\frac{\Delta U}{U_{\infty}}\bigg)_{3}^{2} +
                 \dots}
     \end{equation}
 
