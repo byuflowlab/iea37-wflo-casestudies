@@ -1,0 +1,72 @@
+title: IEA Wind Task 37 Combined Case Study 36 Turbine Farm
+   description: Input file for the 36 turbine wind plant model for IEA Task 37 Combined Case Study
+
+   definitions:
+      wind plant:
+         type: object
+         description: specific plant design including turbine attributes and placement
+         properties:
+            layout:
+               type: array
+               items:
+               - $ref: "/definitions/position"
+
+      position:
+         type: array
+         items:
+         - type: [0, 666.6667, 206.0113, -539.3447, -539.3447, 206.0113, 1333.3333, 1154.7005, 666.6667, 0, -666.6667, -1154.7005, -1333.3333, -1154.7005, -666.6667, 0, 666.6667, 1154.7005, 2000, 879.3852, 1532.0889, 1000, 347.2964, -347.2964, -1000, -1532.0889, -1879.3852, -2000, -1879.3852, -1532.0889, -1000, -347.2964, 347.2964, 1000, 1532.0889, 1879.3852]
+         - type: [0, 0, 634.0377, 391.8568, -391.8568, -634.0377, 0, 666.6667, 1154.7005, 1333.3333, 1154.7005, 666.6667, 0, -666.6667, -1154.7005, -1333.3333, -1154.7005, -666.6667, 0, 684.0403, 1285.5752, 1732.0508, 1969.6155, 1969.6155, 1732.0508, 1285.5752, 684.0403, 0, -684.0403, -1285.5752, -1732.0508, -1969.6155, -1969.6155, -1732.0508, -1285.5752, -684.0403]
+         additionalItems: false
+         description: an array of x-positions [x0, x1, ...] and y-positions [y0, y1, ...] of wind turbines in cartesian coordinates
+         units: m
+
+   wind_turbine:
+      id:
+         meta:
+            type: IEA335MW
+            description: IEA 3.35MW onshore reference wind turbine
+
+   rated_power:
+      type: 3.35
+      description: power rating
+      units: kW
+      minimum: 0.0
+      expr_max: power_curve.max(1)
+
+    operating_modes:
+      type: [normal]
+      description: operating modes for the turbine in this scenario
+      items:
+        $ref: "#/definitions/operating_mode"
+
+  operating_mode:
+    type: object
+    description: the operating mode of the turbine
+
+    properties:
+      id:
+        type: normal
+        description: unique identifier of the operating mode
+
+      name:
+        description: normal operating conditions
+        type: str
+        default: normal operation
+
+      cut_in_wind_speed:
+        type: number
+        description: The starting wind speed of the wind turbine
+        default: 4.0
+        minimum: 0.0
+        maximum: 100.0
+        expr_max: cut_out_wind_speed
+        units: m/s
+
+      cut_out_wind_speed:
+        description: The stopping wind speed of the wind turbine
+        type: number
+        units: m/s
+        default: 25.0
+        expr_min: rated_wind_speed
+        minimum: 0.0
+        maximum: 100.0
