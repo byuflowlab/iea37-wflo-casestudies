@@ -43,13 +43,11 @@ Katherine Dykes\thanks{Senior Engineer, National Wind Technology Center}\\
 
 \section{Introduction}
 
-In order to better understand the differences in Engineering Wake Model (EWM) selection and optimization algorithm implementation, this document defines two simple wind farm layout optimization (WFLO) case studies. These studies are designed to involve a broad spectrum of participants working on the WFLO problem.
+In order to better understand the effects of different Engineering Wake Model (EWM) selection and optimization algorithm implementation, this document defines two simple wind farm layout optimization (WFLO) case studies. These studies are designed to involve a broad spectrum of participants working on the WFLO problem.
     
-    Since two of the major factors contributing to superior wind farm turbine placement recommendations are 1) EWM characteristics and 2) optimization algorithm implementation, the two distinct case studies are designed in an attempt to quantify the effects of alterations in both variables. The first case study isolates optimization techniques for a single simplified EWM, the second observes the differences when combining variations in EWM selection and optimization method.\footnote{Comparisons just between EWMs does not involve optimization and multiple studies already exist in this area.}
+    Two of the major factors that effect the results of wind farm layout studies are 1) EWM characteristics and 2) optimization approach. The two below case studies are designed in an attempt to quantify the effects of both choices. The first case study (called the Optimization Only Case Study, described in \cref{Sec:OptOnly}) explores different optimization techniques paired with a simplified EWM. The second case study (called the Combined Physics Model/Optimization Algorithm Case Study, described in \cref{Sec:Cmbnd}) observes the effects of various combinations of EWM and optimization method combination.\footnote{Comparisons just between EWMs does not involve optimization and multiple studies already exist in this area.}
     
-    To isolate optimization method variability, we have implemented a representative wake model, and permit participants to use any optimization strategy they think will achieve the maximum Annual Energy Production (AEP) for the specified wind farm. This collaboration will be called the Optimization Only Case Study, and is described below in \cref{Sec:OptOnly}.
-    
-    Since an EWM's compatibility with gradient-based or gradient-free optimization methods dictate which algorithms can be applied, designing a case study which restricts participants to a single optimization algorithm would unnecessarily limit the scope of EWMs studied. With the aim of acquiring as much empirical data in order to determine best practices for the industry as a whole, our second case study will permit collaborating participant selection of not only EWM, but also implemented optimization algorithm. It will be called the Combined Physics Model/Optimization Algorithm Case Study, and is described below in \cref{Sec:Cmbnd}.
+    As a participant, your task is to discover the optimal turbine placement for each farm, that delivers the highest AEP possible. For the Optimization Only Case Study, AEP will be calculated by our supplied wake model and algorithm. For the Combined Case Study you are to use your preference of EWM to discover optimal turbine placement, and we will use a Large Eddy Simulator (LES) to calculate and compare AEP of all participant results. You will report both your optimal turbine locations for each wind farm, and describe your methods for finding them in a way that will enable reproducability of your results, the format of which is in \cref{Sec:RepResults}. 
     
     The wind farm characteristics of these two cases are similar, and were selected to be both restrictive enough to maintain simplicity, yet general enough to aid in solving and interpreting the results of more complex and realistic problems.
 
@@ -59,7 +57,7 @@ In order to better understand the differences in Engineering Wake Model (EWM) se
     The intent of this case study is to determine best optimization practices when given an EWM that permits both gradient-based and gradient-free methods to be used. As a representative EWM, we select a simplified version of Bastankhah's Gaussian wake model \cite{Thomas2018,Bastankhah2014,Bastankhah2016}. We supply a Python implementation of this wake model, as well as a description of the model in \cref{app:WakeModel} for those who wish to implement it in another language.
     %Reword above and below paragraphs to clarify AEP calculation is defined.
 
-    With the wake model fixed, participants are free to use whichever computational optimization strategies they choose, with the objective of obtaining the maximum Annual Energy Production (AEP) for the defined farm. In this case study the wind farm boundaries, directional wind frequency, wind turbine attributes, and wake model physics are fixed---turbine locations are the only design variable participants are permitted to alter.
+    With the wake model fixed, participants are free to use whichever computational optimization strategies they choose, with the objective of obtaining the maximum Annual Energy Production (AEP) for the defined farm. In this case study the wind farm boundaries, directional wind frequency, wind turbine attributes, and wake model physics are fixed---turbine locations are the only design variables participants are permitted to alter.
     
     Since problem size strongly affects optimization algorithm performance, three wind farms of increasing size are specified in \cref{Sec:OptWindFarm}. These scenarios, roughly doubling in number of turbines, exist to avoid a bias towards algorithms optimized for wind farms of a specific dimension, and in order to observe how increased complexity correlates to algorithm performance. Perfect squares are used to permit grid turbine arrangements, if desired.
     
@@ -86,13 +84,13 @@ There are three (3) wind farm size scenarios which will be optimized by all part
     \begin{figure}[H]
         \centering
         \includegraphics[width=.65\linewidth]{EmptyOptField.png}
-        \caption{Depiction of circular farm boundary, reference turbine (to scale) placed at origin.}
+        \caption{Depiction of circular farm boundary with 3,400 m radius. Reference turbine (to scale) placed at origin.}
         \label{fig:EmptyFarm}
     \end{figure}
     
 %\newpage
 \subsubsection{Baseline Layouts}\label{Sec:Baseline}
-To assist in validation, a baseline wind turbine layout is supplied as a check for each farm size. The AEP for these baseline layouts, as determined by our wake model implementation, is included in the \texttt{.csv} file for each size scenario, listed in the \texttt{.zip} file accompanying this document. If you choose to utilize your own implementation of the wake model and AEP functions described in \cref{app:WakeModel} instead of the Python implementation provided, insure that your implementation reports the same AEP for these locations.
+To assist in validation, a baseline wind turbine layout is supplied as a check for each farm size. The AEP for these baseline layouts, as determined by our wake model implementation, is included in the \texttt{.csv} file for each size scenario, listed in the \texttt{.zip} file accompanying this document. If you choose to utilize your own implementation of the wake model and AEP functions described in \cref{app:WakeModel} instead of the Python implementation provided, ensure that your implementation reports the same AEP for these locations.
 
 You are also to conduct a single baseline optimization from these baseline layouts, and report your resulting optimized turbine location and AEP values from these starting locations. You are not required to start \textit{each} of your optimizations from these layouts, only report the results from a single run using these starting baselines. For your other optimization attempts, feel free to use random starts, warm starts, intuition, or any other selection method you choose to initialize turbine locations. The exact coordinates for the turbine locations in each of these baseline layouts are also included in \texttt{.csv} files listed in the \texttt{.zip} file accompanying this document. The format for these files is described later in \cref{Sec:Csv}. The baseline layouts are depicted graphically in \cref{fig:BaseLocOpt}
 
@@ -152,7 +150,7 @@ Though not necessary, alteration to the released Python code is permitted, if re
         \item Assume the freestream wind speeds given in this document are at hub height. If you need a wind shear, use a power law relationship with a shear exponent of 0.15.
     \end{itemize}
     
-    The wind farm boundary is circular, as depicted in \cref{fig:EmptyCmbndFarm}. The origin is at the center of the farm, coincident with the depicted reference turbine, and the specified boundary radius is measured from the origin. The radius magnitude was determined by evenly distributing the specified number of turbines in a circle, with no less than 5 diameter spacing between adjacent turbines, and rounding up to the nearest 100 m.
+    The wind farm boundary is circular, as depicted in \cref{fig:EmptyCmbndFarm}. The origin is at the center of the farm, coincident with the depicted reference turbine, and the specified boundary radius is measured from the origin. The radius magnitude was determined by evenly distributing the specified number of turbines in a circle, with no less than 5-diameter spacing between adjacent turbines, and rounding up to the nearest 100 m.
     
     All wind farms will be populated with NREL 3.35 MW onshore reference turbine \cite{NREL335MW}, whose main attributes are summarized in \cref{App:NREL335MW}
     
@@ -168,7 +166,7 @@ Though not necessary, alteration to the released Python code is permitted, if re
     \subsubsection{Baseline Layout}
     To better understand EWM characteristics and optimization methods, a baseline wind turbine layout is supplied. You are to conduct a single baseline optimization from this baseline layout, and report your resulting optimized turbine location and AEP values.
     
-    You are not required to start \textit{each} of your optimizations from these layouts, only report the results from a single run using this starting baseline. For your other optimization attempts, feel free to use random starts, warm starts, intuition, or any other selection method you choose to initialize turbine locations. The exact coordinates for the turbine locations in each of these baseline layouts are included in \texttt{.csv} files listed in the \texttt{.zip} file accompanying this document.
+    You are not required to start \textit{each} of your optimizations from these layouts, only to report the results from a single run using this starting baseline. For your other optimization attempts, feel free to use random starts, warm starts, intuition, or any other selection method you choose to initialize turbine locations. The exact coordinates for the turbine locations in each of these baseline layouts are included in \texttt{.csv} files listed in the \texttt{.zip} file accompanying this document.
     
     \begin{figure}[H]
         \centering
