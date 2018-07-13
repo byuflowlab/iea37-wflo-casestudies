@@ -13,11 +13,11 @@
 % figure package(s)
 \usepackage{booktabs} % For tables
 \usepackage{caption} % For subfigures
+\usepackage[colorlinks,bookmarks,bookmarksnumbered,allcolors=blue]{hyperref}
 \usepackage{enumerate}
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{subcaption} % For subfigures
-\usepackage{wrapfig} % For inline figures
 \usepackage{titling}
 
 % reference package(s)
@@ -30,8 +30,10 @@
     \date{\vspace{-3cm}}
 \maketitle
 
+\noindent This is an explainatory enclosure for the IEA37 Wind Farm Layout Optimization Case Studies.
+
 \section*{Wake Model}
-    The wake model for this study is a simplified version of Bastankhah's Gaussian wake model \cite{Thomas2018}. The governing equations for the velocity deficit in a waked region are:
+    The wake model for the Optimization Only Case Study is a simplified version of Bastankhah's Gaussian wake model \cite{Thomas2018}. The governing equations for the velocity deficit in a waked region are:
     \begin{equation}
         \frac{\Delta U}{U_{\infty}}
         =
