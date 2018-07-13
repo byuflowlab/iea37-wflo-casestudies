@@ -24,8 +24,8 @@
 
 Two major factors that affect wind farm layout optimization are 1) the optimization approach and 2) the wake model. This document defines two case studies designed to study these factors. One may elect to participate in either or both cases.
 \begin{enumerate}
-\item Optimization-Only Case Study: user chooses optimization approach, wake model is fixed and supplied with this study.
-\item Combined Case Study: user is free to choose both optimization approach and wake model.
+    \item Optimization-Only Case Study: user chooses optimization approach, wake model is fixed and supplied.
+    \item Combined Case Study: user is free to choose both optimization approach and wake model.
 \end{enumerate}
 
 Participants will optimize turbine locations to maximize annual energy production, submit solutions, and provide details on their methodology.  After all submissions are received, participants will be expected to perform a cross comparison of other participant solutions.  Data will be consolidated, processed, and made available to all participants.
@@ -36,7 +36,7 @@ Participants will optimize turbine locations to maximize annual energy productio
 
 The objective of each scenario is to maximize annual energy production, which we define simply as the expected value of aerodynamic power.  The wind resource for each case has a wind rose binned into 16 discrete directions, with a constant wind speed.  In other words:
 \begin{equation*}
-AEP = \left(\sum_{i=1}^{16} f_i P_i\right) 8760 \frac{\textrm{hrs}}{\textrm{yr}}
+    AEP = \left(\sum_{i=1}^{16} f_i P_i\right) 8760 \frac{\textrm{hrs}}{\textrm{yr}}
 \end{equation*}
 where $P_i$ is the power produced for wind direction $i$, and $f_i$ is the corresponding wind direction probability.
 
@@ -52,36 +52,41 @@ Each scenario has a fixed circular boundary centered at $(0, 0)$.  All turbine $
 
 The wind turbine is the IEA37 3.35 MW onshore reference turbine \cite{NREL335MW} with the following characteristics:
 \begin{center}
-\begin{tabular}{@{}lrl@{}}
-\toprule
-Rotor Diameter & 130 & m \\ 
-Turbine Rating & 3.35 & MW \\ 
-Cut-In Wind Speed & 4 & m/s \\ 
-Rated Wind Speed & 9.8 & m/s \\ 
-Cut-Out Wind Speed & 25 & m/s \\
-\bottomrule
-\end{tabular}
+    \begin{tabular}{@{}lrl@{}}
+    \toprule
+        Rotor Diameter & 130 & m \\ 
+        Turbine Rating & 3.35 & MW \\ 
+        Cut-In Wind Speed & 4 & m/s \\ 
+        Rated Wind Speed & 9.8 & m/s \\ 
+        Cut-Out Wind Speed & 25 & m/s \\
+    \bottomrule
+    \end{tabular}
 \end{center}
 
 The power curve is defined as:   
 
 \begin{minipage}{0.5\textwidth}
-\begin{equation*}
-P(V) = 
-\begin{cases} 
-0 & V < V_{\textit{cut-in}} \\
-P_{\textit{rated}}\bigg(\frac{V-V_{\textit{cut-in}}}{V_{\textit{rated}}-V_{\textit{cut-in}}}\bigg)^3 & V_{\textit{cut-in}}\leq V \leq V_{\textit{rated}} \\
-P_{\textit{rated}} & V > V_{\textit{rated}}
-\end{cases}
-\label{eq:power}
-\end{equation*}
+    \begin{equation*}
+        P(V) = 
+        \begin{cases} 
+            0 & V < V_{\textit{cut-in}} \\
+            P_{\textit{rated}}\bigg(\frac{V-V_{\textit{cut-in}}}{V_{\textit{rated}}-V_{\textit{cut-in}}}\bigg)^3 & V_{\textit{cut-in}}\leq V \leq V_{\textit{rated}} \\
+            P_{\textit{rated}} & V > V_{\textit{rated}}
+        \end{cases}
+    \label{eq:power}
+    \end{equation*}
 \end{minipage}\qquad
 \begin{minipage}{0.5\textwidth}
-\includegraphics[width=2.5in]{power_curve}
+    \includegraphics[width=2.5in]{power_curve}
 \end{minipage}
 
 
 The wind rose is defined by 16 discrete bins tabulated in baseline.yaml and depicted pictorially below.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=3.5in]{iea37-wflo-casestudy-windrose}
+\end{figure}
 
 \subsection{Optimization Only}
 
@@ -89,7 +94,7 @@ This problem defines three different wind farm sizes, and corresponding number o
 \begin{enumerate}
     \item 16 turbines, boundary radius of 1,300 m.
     \item 36 turbines, boundary radius of 2,000 m.
-    \item 64 turbines, boundary radius of 3,400 m.
+    \item 64 turbines, boundary radius of 3,000 m.
 \end{enumerate}
 
 The user is only free to choose the optimization approach.  The wake model for this study is fixed and is a version of Bastankhah's Gaussian wake model \cite{Thomas2018, Bastankhah2014, Bastankhah2016}.  A Python implementation is supplied for convenience (AEPcalc.py). Alterations to the implementation are permitted, as long as the governing physics equations are not altered.  Participants may use other programming languages, but must use the same physics equations.  To aid with this, the relevant equations are defined in a separate document (wake-model.pdf), and example layouts with corresponding AEP values are provided in (example.yaml) to verify implementations.  The example designs are only for verification, and do not need to be used as starting points in your optimization.  
