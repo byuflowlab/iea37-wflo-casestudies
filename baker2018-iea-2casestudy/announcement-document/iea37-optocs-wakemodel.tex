@@ -1,0 +1,88 @@
+% general package(s)
+\documentclass[12pt]{article}
+\usepackage[margin=0.8in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+
+% math package(s)
+\usepackage{amsmath}
+%\usepackage[urw-garamond]{mathdesign}
+\usepackage{gensymb}
+
+% figure package(s)
+\usepackage{booktabs} % For tables
+\usepackage{caption} % For subfigures
+\usepackage{enumerate}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{subcaption} % For subfigures
+\usepackage{wrapfig} % For inline figures
+\usepackage{titling}
+
+% reference package(s)
+\usepackage[capitalize]{cleveref}
+
+\begin{document}
+
+\title{\vspace{-3cm}Wake Model Description \\ \small{for the} \\ \large{Optimization Only Case Study} \\
+    \small{IEA Task 37 on System Engineering in Wind Energy}}
+    \date{\vspace{-3cm}}
+\maketitle
+
+\section*{Wake Model}
+    The wake model for this study is a simplified version of Bastankhah's Gaussian wake model \cite{Thomas2018}. The governing equations for the velocity deficit in a waked region are:
+    \begin{equation}
+        \frac{\Delta U}{U_{\infty}}
+        =
+        \Bigg(
+            1 - \sqrt{
+                1 - \frac{C_T}
+                    {8\sigma_{y}^{2}/D^2}
+                }
+        \Bigg)
+                \text{exp}\bigg(
+                    -0.5\Big(
+                        \frac{y-\delta}{\sigma_{y}}
+                    \Big)^2
+                \bigg)
+        \label{Eq:Bast}
+    \end{equation}
+    \begin{equation}
+        \sigma_y = k_y\cdot x + \frac{D}{\sqrt{8}} \\
+        \label{Eq:SigY}
+    \end{equation}
+    
+    Where:
+    
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|c|l|l|}
+            \hline
+             Variable & Value & Definition \\ \hline
+            $\frac{\Delta U}{U_{\infty}}$ & - & Wake velocity deficit \\ \hline
+            $C_T$ & $\frac{8}{9}$ & Thrust coefficient \\ \hline
+            $y-\delta$ & - & Dist. from hub of interest to the wake center in cross-stream direction \\ \hline
+            $D$ & $130$ m & Turbine diameter \\ \hline
+            $\sigma_y$ & \cref{Eq:SigY} & Standard deviation of the wake deficit \\ \hline
+            $k_y$ & 0.0324555 & Variable based on a turbulence intensity of 0.075 \cite{Thomas2018, Niayifar2016} \\ \hline
+            $x$ & - & Downstream dist. from hub generating wake to hub of interest \\ \hline
+        \end{tabular}
+    \end{table}
+\vspace{-0.25cm}
+    Partial wake is not considered. Hub coordinates are used for all location calculations. For turbines placed in multiple wakes, the compound velocity deficit is calculated using the square root of the sum of the squares, depicted in \cref{Eq:CmbndWake}:
+    
+    \begin{equation}
+    \label{Eq:CmbndWake}
+        \bigg(\frac{\Delta U}{U_{\infty}}\bigg)_{cmbnd} = 
+            \sqrt{
+                \bigg(\frac{\Delta U}{U_{\infty}}\bigg)_{1}^{2} +
+                \bigg(\frac{\Delta U}{U_{\infty}}\bigg)_{2}^{2} +
+                \bigg(\frac{\Delta U}{U_{\infty}}\bigg)_{3}^{2} +
+                \dots}
+    \end{equation}
+
+\bibliographystyle{aiaa}
+\bibliography{announcement}
+
+\end{document}
