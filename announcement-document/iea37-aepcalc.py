@@ -24,7 +24,7 @@ def WindFrame(turbineX, turbineY, windDirectionDeg):
 
 def GaussianWake(turbineXw, turbineYw):
     """ Returns each turbines total loss from wakes """
-    # Equations and values explained in <iea37-optocs-wakemodel.pdf>
+    # Equations and values explained in <iea37-wakemodel.pdf>
     nTurbines = len(turbineXw)
 
     CT = 4.0*1./3.*(1.0-1./3.)  # constant thrust coefficient
@@ -135,7 +135,8 @@ if __name__ == "__main__":
     turbineY = np.array([])
 
     # Reads turbine locations and wind freq distribution from .yaml files
-    # example command line syntax is "python iea37-optocs-aepcal.py iea37-optocs-example16.yaml iea37-bothcs-windrose.yaml"
+    # For Python .yaml capability, in the terminal type "pip install pyyaml".
+    # An Example command line syntax to run this file is "python iea37-aepcal.py iea37-ex16.yaml iea37-windrose.yaml"
     turbineX, turbineY = getTurbLocYAML(sys.argv[1])    # Get turbine locations from .yaml file
     windFreq = getWindFreqYAML(sys.argv[2])             # Get wind frequency distribution from .yaml file
     AEP = calcAEP(turbineX, turbineY, windFreq)         # Calculate the AEP from ripped values

@@ -1,0 +1,34 @@
+input_format_version: 0
+title: IEA Wind Task 37 Combined Case Study 9 Turbine Farm
+description: input file for the 9 turbine wind plant model for IEA Task 37 Combined Case Study
+
+definitions:
+  wind_plant:
+    type: object
+    description: specific plant design including turbine selection and placement
+    properties:
+      layout:
+        type: array
+        items:
+          - $ref: "#/definitions/position"
+
+  position:
+    type: array
+    items:
+      xc: [0., 900., 636.3961, 0., -636.3961, -900., -636.3961, 0., 636.3961]
+      yc: [0., 0., 636.3961, 900., 636.3961, 0., -636.3961, -900., -636.3961]
+    additionalItems: false
+    description: an array of x-coordinates [x0, x1, ...] and y-coordinates [y0, y1, ...] of wind turbine positions in cartesian coordinates
+    units: m          
+
+
+  plant_energy:
+    type: object
+    description: energy production from simplified Bastankhah Gaussian wake model
+
+    properties:
+      annual_energy_production:
+        type: number
+        description: total (annual) energy production for a wind plant given a layout and wind rose
+        default: 193047.378322
+        units: MWh
