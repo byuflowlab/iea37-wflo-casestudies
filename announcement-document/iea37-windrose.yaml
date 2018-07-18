@@ -55,7 +55,10 @@ definitions:
         type: number
         description: The wind direction in degree, with North as the 0. 16 bins.
         units: deg
-        bins: [0., 22.5, 45., 67.5, 90., 112.5, 135., 157.5, 180., 202.5, 225., 247.5, 270., 292.5, 315., 337.5]
+        bins: [0., 22.5, 45., 67.5,
+               90., 112.5, 135., 157.5,
+               180., 202.5, 225., 247.5,
+               270., 292.5, 315., 337.5]
         minimum: 0.0
         maximum: 360.0
 
@@ -76,5 +79,8 @@ definitions:
 
       probability:
           type: number
-          default: [.107,  .045,  .055,  .051, .108,  .039,  .041,  .061, .100,  .053,  .057,  .057, .109,  .042,  .032,  .043]
+          default: [.025,  .024,  .029,  .036,
+                    .063,  .065,  .100,  .122,
+                    .063,  .038,  .039,  .083,
+                    .213,  .046,  .032,  .022]
           description: Wind directional frequency distribution for 16 bins of wind rose
