@@ -1,54 +1,12 @@
-input_format_version: 0
 title: IEA Wind Task 37 Wind Plant Ontology version 0.1
-description: wind resource conditions for a IEA37 WFLO Case Studies
+description: Wind resource conditions for a IEA37 WFLO Case Studies.
+             Template located at <https://github.com/IEAWindTask37/ontology/blob/master/plant_energy_inflow_lookup.yaml>
 
 definitions:
-
-  wind_resource:
+  wind_inflow:
     type: object
-    oneOf:
-      - $ref: "#/definitions/single_wind_rose"
-    additionalItems: false
-    
-  single_wind_rose:
-    type: object
-    oneOf:
-      - $ref: "#/definitions/probability_wind_rose"
-    additionalItems: false
+    description: inflow for current wind conditions
 
-  probability_wind_rose:
-    type: object
-    description: A wind rose described by a 2D array of wind speed and wind directions
-
-    properties:
-      directions:
-        type: array
-        items:
-          $ref: "#/definitions/wind/properties/wind_direction"
-        description: the wind direction corresponding to the 1st dimension
-
-      speeds:
-        type: array
-        items:
-          - $ref: "#/definitions/wind/properties/speed"
-        description: the wind speed corresponding to the 2nd dimension
-      
-      turbulence intensity:
-        type: array
-        items:
-          $ref "#/definitions/wind/properties/ti"
-        description: the turbulence intensity corresponding to the 3rd dimension
-
-      probabilities:
-        type: array
-        items:
-          type: array
-          items:
-            - $ref: "#/definitions/probability"
-        description: the probability of occurance of wind speed ndarray.shape([len(wind_directions), len(wind_speeds)])  
-
-  wind:
-    type: object
     properties:
       direction:
         id: "wind_direction"
@@ -66,21 +24,17 @@ definitions:
         type: number
         description: A wind speed, constant for these case studies.
         default: 9.8
-        minimum: 0.0
-        maximum: 100.0
         units: m/s
 
       ti:
         type: number
         description: Turbulence intensity
         default: 0.075
-        minimum: 0.0
-        maximum: 1.0
 
       probability:
           type: number
+          description: Wind directional frequency distribution for 16 bins of wind rose
           default: [.025,  .024,  .029,  .036,
                     .063,  .065,  .100,  .122,
                     .063,  .038,  .039,  .083,
                     .213,  .046,  .032,  .022]
-          description: Wind directional frequency distribution for 16 bins of wind rose

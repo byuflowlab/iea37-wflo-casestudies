@@ -65,15 +65,16 @@
             \end{tabular}
         \end{center}
 
-        The power curve is defined as:   
+        \noindent All turbine data is also contained in the enclosed \texttt{iea37-335mw.yaml}. The power curve is defined as:   
 
         \begin{minipage}{0.5\textwidth}
             \begin{equation*}
                 P(V) = 
                 \begin{cases} 
                     0 & V < V_{\textit{cut-in}} \\
-                    P_{\textit{rated}}\bigg(\frac{V-V_{\textit{cut-in}}}{V_{\textit{rated}}-V_{\textit{cut-in}}}\bigg)^3 & V_{\textit{cut-in}}\leq V \leq V_{\textit{rated}} \\
-                    P_{\textit{rated}} & V > V_{\textit{rated}}
+                    P_{\textit{rated}}\cdot\bigg(\frac{V-V_{\textit{cut-in}}}{V_{\textit{rated}}-V_{\textit{cut-in}}}\bigg)^3 & V_{\textit{cut-in}}\leq V \leq V_{\textit{rated}} \\
+                    P_{\textit{rated}} & V_{\textit{rated}} < V < V_{\textit{cut-out}} \\
+                    0 & V_{\textit{cut-out}} \leq V
                 \end{cases}
             \label{eq:power}
             \end{equation*}
@@ -82,8 +83,7 @@
             \includegraphics[width=2.5in]{iea37-335mw-pcurve}
         \end{minipage}
 
-
-        The wind rose is defined by 16 discrete bins tabulated in \texttt{iea37-windrose.yaml} and depicted pictorially below:
+        The farm wind speed for all scenarios is constant at 9.8 m/s. North is measured at $0^{\circ}$, and the wind rose is defined by 16 discrete bins tabulated in \texttt{iea37-windrose.yaml}, depicted pictorially below:
         \vspace{-1em}
         \begin{figure}[h!]
             \centering
@@ -117,7 +117,22 @@
 
     \subsection{Case Study 1: Optimization Only}
 
-        Results will be compared by running \texttt{iea37-aepcalc.py} using the submitted \texttt{.yaml} file from each participant.  Submissions must adhere to the format in order to receive a ranking.  While other implementations may be used in the optimization, all evaluations will be done with the provided \texttt{iea37-aepcalc.py} code, so it is essential that you check that your implementation is consistent.
+        Results will be compared by running \texttt{iea37-aepcalc.py} using the submitted \texttt{.yaml} file from each participant.
+        Submissions must adhere to the format in order to receive a ranking.
+        While other implementations may be used in the optimization, all evaluations will be done with the provided \texttt{iea37-aepcalc.py} code, so it is essential that you check that your implementation is consistent.
+
+        Example command-line syntax we will use to evaluate all files is:
+        
+        \vspace{0.5em}
+        \texttt{\$python iea37-aepcalc.py iea37-ex16.yaml iea37-windrose.yaml iea37-335mw.yaml}
+        \vspace{0.5em}
+        
+        \noindent Where: 
+        \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+            \item \texttt{iea37-ex16.yaml} will be your submitted \texttt{.yaml} with optimal turbine locations.
+            \item \texttt{iea37-windrose.yaml} is the wind rose used for both case studies.
+            \item \texttt{iea37-335mw.yaml} is the turbine data for the used IEA37 3.35 MW onshore reference turbine.
+        \end{itemize}
 
     \subsection{Case Study 2: Combined}
 
@@ -132,13 +147,15 @@
 
     \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
         \item \texttt{iea37-windrose.yaml} - binned wind frequency in \texttt{.yaml} format
+        \item \texttt{iea37-335mw.yaml} - data for reference turbine used in both case studies
         \item \texttt{iea37-aepcalc.py} - Python coding of AEP wake model for Optimization Only Case Study
         \item \texttt{iea37-wakemodel.pdf} - description of AEP wake model for Optimization Only Case Study
         \item \texttt{iea37-ex16.yaml} - 16 turbine scenario example layout
         \item \texttt{iea37-ex36.yaml} - 36 turbine scenario example layout
         \item \texttt{iea37-ex64.yaml} - 64 turbine scenario example layout
     \end{itemize}
-\vspace{-1em}
+%\vspace{-1em}
+\newpage
 \bibliographystyle{aiaa}
 \bibliography{iea37-wflocs-announcement}
 

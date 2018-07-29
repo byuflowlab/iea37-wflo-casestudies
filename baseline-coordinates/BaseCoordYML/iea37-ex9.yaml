@@ -1,6 +1,7 @@
 input_format_version: 0
 title: IEA Wind Task 37 Combined Case Study 9 Turbine Farm
 description: input file for the 9 turbine wind plant model for IEA Task 37 Combined Case Study
+             Template located at <https://github.com/IEAWindTask37/ontology/blob/develop/plant_energy_energy_convolution.yaml>
 
 definitions:
   wind_plant:
@@ -11,6 +12,7 @@ definitions:
         type: array
         items:
           - $ref: "#/definitions/position"
+          - $ref: "iea37-335MW/definitions/wind_turbine"
 
   position:
     type: array
@@ -27,8 +29,22 @@ definitions:
     description: energy production from simplified Bastankhah Gaussian wake model
 
     properties:
+      wake_model_selection:
+        type: algorithm
+        description: wake model used to calculate AEP
+        items:
+          - $ref: "iea37-aepcalc.py"
+
+      wind_resource_selection:
+        type: object
+        description: specific wind resource used to calculate AEP
+        properties:
+          type: array
+          items:
+            - $ref: "iea37-windrose/definitions/wind_inflow"
+
       annual_energy_production:
         type: number
         description: total (annual) energy production for a wind plant given a layout and wind rose
-        default: 193047.378322
+        default: 117904.218892
         units: MWh
