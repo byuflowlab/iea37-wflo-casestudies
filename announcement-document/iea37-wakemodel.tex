@@ -130,12 +130,12 @@ Please insure your implementation computes the same AEP value given in each of t
                         \end{itemize}
                     \item Sum powers from all $n$ turbines
                         \begin{equation}
-                            P_{farm} = \sum_{i=1}^n P_{turbine}
+                            P_{farm} = \sum_{j=1}^n P_{turbine, j}
                         \end{equation}
             \end{enumerate}
-        \item Compute AEP using farm power for all $i$ directions where $P$ is the wind farm power for direction $i$ and $f$ is the corresponding frequency for direction $i$.  The factor of 8760 is just to multiply by hours in a year:
+        \item Compute AEP using farm power for all $m$ directions where $P$ is the wind farm power for direction $i$ and $f$ is the corresponding frequency for direction $i$.  The factor of 8760 is just to multiply by hours in a year:
         \begin{equation}
-        AEP = \left(\sum_{i=1}^{16} f_i P_i\right) 8760 \frac{\textrm{hrs}}{\textrm{yr}}
+        AEP = \left(\sum_{i=1}^{m} f_i P_i\right) 8760 \frac{\textrm{hrs}}{\textrm{yr}}
         \end{equation}
         
     \end{enumerate}
