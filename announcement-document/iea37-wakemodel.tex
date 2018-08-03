@@ -104,7 +104,7 @@ Please insure your implementation computes the same AEP value given in each of t
             \begin{enumerate}
                 \item For each binned direction $\theta$, rotate the turbine locations $(x,y)$ into the into the wind frame of reference $(x_w, y_w)$:
                 \begin{align*}
-                    \Psi &= -\left(\frac{\pi}{2} + \theta\right) \text{ note: 90 deg offset between north and x-axis, negative rotation}\\
+                    \Psi &= -\left(\frac{\pi}{2} + \theta\right) \\
                     x_w &= x\cos(\Psi) + y\sin(\Psi)\\
                     y_w &= -x\sin(\Psi) + y\cos(\Psi)
                 \end{align*}
