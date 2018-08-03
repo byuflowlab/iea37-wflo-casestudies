@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[10pt]{article}
 
 \usepackage[margin=1in]{geometry}
 \usepackage{graphicx}
@@ -76,7 +76,7 @@
                     0 & V < V_{\textit{cut-in}} \\
                     P_{\textit{rated}}\cdot\bigg(\frac{V-V_{\textit{cut-in}}}{V_{\textit{rated}}-V_{\textit{cut-in}}}\bigg)^3 & V_{\textit{cut-in}}\leq V \leq V_{\textit{rated}} \\
                     P_{\textit{rated}} & V_{\textit{rated}} < V < V_{\textit{cut-out}} \\
-                    0 & V_{\textit{cut-out}} \leq V
+                    0 & V \geq V_{\textit{cut-out}}
                 \end{cases}
             \label{eq:power}
             \end{equation*}
@@ -86,16 +86,14 @@
         \end{minipage}
 
         The farm wind speed for all scenarios is constant at 9.8 m/s. North is measured at $0^{\circ}$, and the CCW wind rose is defined by 16 discrete bins tabulated in \texttt{iea37-windrose.yaml}, depicted pictorially below:
-        \vspace{-1em}
-        \begin{figure}[h!]
-            \centering
+        \begin{center}
             \includegraphics[width=3.5in]{iea37-windrose}
-        \end{figure}
-        \vspace{-2em}
+        \end{center}
+        
     \subsection{Case Study 1: Optimization Only}
 
         This problem defines three different wind farm sizes, and corresponding number of turbines, intended to test scalability of your optimization approach.  The three scenarios are:
-        \begin{enumerate}[noitemsep, nolistsep]
+        \begin{enumerate}
             \item 16 turbines, boundary radius of 1,300 m.
             \item 36 turbines, boundary radius of 2,000 m.
             \item 64 turbines, boundary radius of 3,000 m.
@@ -119,12 +117,12 @@
 \section{Reporting and Evaluation}
 
     Participants will submit:
-    \begin{enumerate}[noitemsep, nolistsep]
+    \begin{enumerate}
         \item Optimal turbine placement solution for each scenario using the format in the example \texttt{.yaml} files. 
         \item A survey describing your methodology and simulation environment \href{https://goo.gl/forms/2tX3eJ0rlnElmTgR2}{here}.
     \end{enumerate}
 
-    \hfill \break \indent Note that for both Case Studies, your \texttt{.yaml} submissions must report both total farm AEP, and farm AEP for each $\theta$ bin, as in the enclosed \texttt{iea37-ex\#\#.yaml} examples.
+    Note that for both Case Studies, your \texttt{.yaml} submissions must report both total farm AEP, and farm AEP for each $\theta$ bin, as in the enclosed \texttt{iea37-ex\#\#.yaml} examples.
 
     \subsection{Case Study 1: Optimization Only}
 
@@ -139,7 +137,7 @@
         \vspace{0.5em}
         
         \noindent Where: 
-        \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+        \begin{itemize}
             \item \texttt{iea37-yourname-opt\#\#.yaml} will be your submitted \texttt{.yaml} with optimal turbine locations.
             \begin{itemize}
                 \item ``\texttt{yourname}'' is your personal or organizational name, all lowercase with no spaces or punctuation.
@@ -152,7 +150,7 @@
     \subsection{Case Study 2: Combined}
 
         Because the wake models differ in this case, determining a ``best'' solution is generally not possible.  Comparisons will be made using two approaches:
-        \begin{enumerate}[noitemsep, nolistsep]
+        \begin{enumerate}
             \item Every participant will evaluate every other participant's solutions using their own wake model(s).  It is essential that the \texttt{.yaml} format is adhered to so that cross-comparisons are painless. % If the optimizations behave as expected, each participant's wake model will judge their own solution as best, but it is possible a solution is found that other wake models agree is better.
             \item Each solution will be compared using a higher-fidelity simulation, in this case large-eddy simulations (LES) using SOWFA.  This simulation introduces its own modeling assumptions and is an imperfect way to compare, but does provide another piece of information on relative performance between approaches. % It is expected that solutions with minor LES performance differences would lie within the error of the methodology, and thus only major differences will be used in drawing conclusions on relative performance.
         \end{enumerate}
@@ -169,8 +167,7 @@
         \item \texttt{iea37-ex36.yaml} - 36 turbine scenario example layout
         \item \texttt{iea37-ex64.yaml} - 64 turbine scenario example layout
     \end{itemize}
-%\vspace{-1em}
-\newpage
+
 \bibliographystyle{aiaa}
 \bibliography{iea37-wflocs-announcement}
 
