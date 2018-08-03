@@ -2,19 +2,18 @@ import numpy as np
 import sys
 import yaml                                 # For reading .yaml files
 from math import radians as DegToRad        # For converting from degrees to radians
-# Written by PJ Stanley, Jared Thomas, and Nicholas F. Baker
+# Written by Nicholas F. Baker, PJ Stanley, and Jared Thomas
 # BYU FLOW lab
-# Completed 10 June 2018
+# Created 10 June 2018
 # Updated 11 Jul 2018 to include read-in of .yaml turb locs and wind freq dist.
 # Completed 26 Jul 2018 for commenting and release
 
 def WindFrame(turbineX, turbineY, windDirDeg):
-    """ Calculates the locations of each turbine in the frame of reference of the specified wind direction """
+    """ Convert from meteorological polar system (CW, 0 deg.=N) to standard polar system (CCW, 0 deg.=W) """
 
-    # Convert from meteorological polar system (CW, 0 deg.=N) to standard polar system (CCW, 0 deg.=W)
-    windDirDeg = 270. - windDirDeg          # Shift so wind comes "along" x-axis, from left to right.
+    windDirDeg = 270. - windDirDeg          # Shift so North comes "along" x-axis, from left to right.
     if windDirDeg < 0.:                     # If it's left of North (up)
-        windDirDeg += 360.                  # Then adjust so we count CW from up.
+        windDirDeg += 360.                  # Then adjust so we count CCW from West.
     windDirRad = DegToRad(windDirDeg)       # Convert inflow wind direction from degrees to radians
 
     # Convert to downwind(x) & crosswind(y) coordinates
@@ -30,7 +29,7 @@ def GaussianWake(turbineXw, turbineYw):
     nTurbines = len(turbineXw)
 
     CT = 4.0*1./3.*(1.0-1./3.)  # Constant thrust coefficient
-    k = 0.0324555               # Constant turbulence
+    k = 0.0324555               # Constant, relating to a turbulence intensity of 0.075
 
     D = 130.                    # IEA37 3.35MW onshore reference turbine rotor diameter
 
@@ -41,10 +40,10 @@ def GaussianWake(turbineXw, turbineYw):
         for j in range(nTurbines):          # Looking at all the others (Target)
             x = turbineXw[i]-turbineXw[j]   # Calculate the x-distance
             y = turbineYw[i]-turbineYw[j]   # And the y-offset
-            if x > 0.:                      # If the Target turb is downwind of the Primary
+            if x > 0.:                      # If the turb of interest is downwind of the turbine generating the wake
                 sigma = k*(x)+D/np.sqrt(8.) # Calculate the wake loss using the Simplified Bastankhah Gaussian wake model
                 loss_array[j] = (1.-np.sqrt(1.-CT/(8.*sigma**2/D**2)))*np.exp(-0.5*(y/sigma)**2)
-            else:                           # If it's upstream
+            else:                           # But if the turb of interest is upstream
                 loss_array[j] = 0.          # No wake effect in this model, count loss as zero
         loss[i] = np.sqrt(np.sum(loss_array**2))  # Total wake losses from all upstream turbines, using sqrt of sum of sqrs
 
@@ -54,25 +53,25 @@ def DirPower(turbineX, turbineY, windDirDeg, windSpeed, turbCI, turbCO, turbRtdW
     """ Returns the power produced by each turbine for a given wind speed and direction """
     nTurbines = len(turbineX)
 
-    turbineXw, turbineYw = WindFrame(turbineX,turbineY,windDirDeg)  # Shift coordinate frame of reference so wind comes from West
+    turbineXw, turbineYw = WindFrame(turbineX,turbineY,windDirDeg)  # Shift coordinate frame of reference so ``North'' aligns with -x direction
     loss = GaussianWake(turbineXw, turbineYw)                       # Use the Simplified Bastankhah Gaussian wake model to calculate wake deficits
 
-    windSpeedEff = windSpeed*(1.-loss)                              # Effective windspeed is freestream multiplied by the calculated deficits
+    windSpeedEff = windSpeed*(1.-loss)                              # Effective windspeed is freestream multiplied by the calculated wake deficits
 
     pwrTurb = np.zeros(nTurbines)
 
     #  Calculate the power from each turb based on experienced wind speed & power curve
-    for i in range(nTurbines):                                      # Looking at each turbine
-        if windSpeedEff[i] <= turbCI:                       # If we're below the cut-in speed
-            pwrTurb[i] = 0.                                         # It won't produce power
-        elif turbCI < windSpeedEff[i] < turbRtdWS:          # If we're on the curve
-            pwrTurb[i] = turbRtdPwr*((windSpeedEff[i]-turbCI)/(turbRtdWS-turbCI))**3    # Calculate the curve speed
-        elif turbRtdWS < windSpeedEff[i] < turbCO:          # If we're between rated ws and cut-out
-            pwrTurb[i] = turbRtdPwr                                 # Produce rated power
-        else:                                               # If we're above the curve (though this scenario doesn't go past cut-out speed)
-            pwrTurb[i] = 0                                          # It generates no power
+    for n in range(nTurbines):                                      # Looking at each turbine
+        if windSpeedEff[n] <= turbCI:                       # If we're below the cut-in speed
+            pwrTurb[n] = 0.                                         # It won't produce power
+        elif turbCI < windSpeedEff[n] < turbRtdWS:          # If we're on the curve
+            pwrTurb[n] = turbRtdPwr*((windSpeedEff[n]-turbCI)/(turbRtdWS-turbCI))**3    # Calculate the curve speed
+        elif turbRtdWS < windSpeedEff[n] < turbCO:          # If we're between rated and cut-out wind speeds
+            pwrTurb[n] = turbRtdPwr                                 # Produce rated power
+        else:                                               # If we're above the curve (though the Case Studies don't go past cut-out speed)
+            pwrTurb[n] = 0                                          # It generates no power
 
-    pwrDir = np.sum(pwrTurb)  # Sum of power from all turbines for this direction
+    pwrDir = np.sum(pwrTurb)  # Sum the power from all turbines for this direction
 
     return pwrDir
 
@@ -88,9 +87,9 @@ def calcAEP(turbineX, turbineY, windFreq, windSpeed, windDir, turbCutInWS, turbC
                                   turbCutInWS, turbCutOutWS, turbRtdWS, turbRtdPwr) # Find the farm's power for the given direction
 
     #  Convert power to AEP
-    hrsPerYr = 365.*24.
-    AEP = hrsPerYr * np.sum(windFreq*PwrProduced)
-    AEP /= 1.E6 # Convert to MWh
+    hrsPerYr = 365.*24.                             # Const Value for hours in a year
+    AEP = hrsPerYr * (windFreq*PwrProduced)         # AEP for each binned direction
+    AEP /= 1.E6                                     # Convert to MWh
 
     return AEP
 
@@ -122,8 +121,7 @@ def getWindRoseYAML(sFileName):
     windSpeed = float(doc['definitions']['wind_inflow']['properties']['speed']['default'])             # Convert from <list> to <float>
 
     return windDir, windFreq, windSpeed
-
-def getTurbAtrbt(sFileName):
+def getTurbAtrbtYAML(sFileName):
     # Read in the .yaml file
     with open(sFileName, 'r') as f:
         doc = yaml.load(f)
@@ -147,9 +145,10 @@ if __name__ == "__main__":
     # Read necessary values from .yaml files
     turbineX, turbineY = getTurbLocYAML(sys.argv[1])                # Get turbine locations from .yaml file
     windDir, windFreq, windSpeed = getWindRoseYAML(sys.argv[2])     # Get the array wind sampling bins, frequency at each bin, and wind speed
-    turbCutInWS, turbCutOutWS, turbRtdWS, turbRtdPwr = getTurbAtrbt(sys.argv[3])  # Pull from the turbine file
+    turbCutInWS, turbCutOutWS, turbRtdWS, turbRtdPwr = getTurbAtrbtYAML(sys.argv[3])  # Pull needed values from the turbine file
 
     # Calculate the AEP from ripped values
     AEP = calcAEP(turbineX, turbineY, windFreq, windSpeed, windDir,
                   turbCutInWS, turbCutOutWS, turbRtdWS, turbRtdPwr)
-    print AEP                                                       # Print calculated AEP
+    print np.around(AEP,decimals=5)                                 # Print AEP for each binned direction, with 5 digits behind the decimal.
+    print np.around(np.sum(AEP),decimals=5)                         # Print AEP summed for all directions

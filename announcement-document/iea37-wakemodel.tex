@@ -15,6 +15,7 @@
 \usepackage{caption} % For subfigures
 \usepackage[colorlinks,bookmarks,bookmarksnumbered,allcolors=blue]{hyperref}
 \usepackage{enumerate}
+\usepackage{enumitem} % For itemized lists
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{subcaption} % For subfigures
@@ -23,51 +24,85 @@
 % reference package(s)
 \usepackage[capitalize]{cleveref}
 
+\AtBeginDocument{%
+   \setlength\abovedisplayskip{0pt}
+   \setlength\belowdisplayskip{0pt}}
+
 \begin{document}
 
 \title{\vspace{-3cm}Wake Model Description \\ \small{for the} \\ \large{Optimization Only Case Study} \\
     \small{IEA Task 37 on System Engineering in Wind Energy}}
-    \date{\vspace{-3cm}}
+    \date{\vspace{-2.8cm}}
 \maketitle
 
-\noindent This is an explainatory enclosure for the IEA37 Wind Farm Layout Optimization Case Studies.
+This is an explainatory enclosure to accompany \texttt{iea37-wflocs-announcement.pdf}.
+
+\indent For the Optimization Only Case Study, we will use the enclosed Python file \texttt{iea37-aepcalc.py} to evaluate your reported optimal turbine locations in \texttt{.yaml} format.
+If you desire to implement the AEP calculations in a language other than Python, the algorithm's description and wake model equations are provided below.
+Please insure your implementation computes the same AEP value given in each of the example layouts (\texttt{iea37-ex\#\#.yaml}) also enclosed.
 
 \section*{AEP Algorithm}
-
-    For the Optimization Only Case Study, the enclosed Python file \texttt{iea37-aepcalc.py} is what will be used to evaluate your reported \texttt{.yaml} optimal turbine locations.
-    If you desire to implement the algorithm in another programming language, a step description is provided below. Please esure your implementation computes the same AEP value for each of the example layouts (\texttt{iea37-exXX.yaml}) also enclosed.
     
-    \begin{enumerate}
+    \begin{enumerate}[parsep=0pt,partopsep=0pt]
         \item Read the following input from \texttt{.yaml} files:
-            \begin{itemize}
+            \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
                 \item Turbine ($x$,$y$) locations.
                 \item Turbine attributes (cut-in\textbackslash cut-out\textbackslash rated wind speed\textbackslash rated power).
-                \item Wind directional bins (16 in this Case Study).
-                \item Wind frequency at each binned direction.
-                \item Wind speed at each direction (invariant at 9.8 $m/s$ for these Case Studies).
+                \item Number of wind directional bins, $\theta_{i}$ ($i=16$ for these Case Studies).
+                \item Wind frequency at each binned direction, $f(\theta)$.
+                \item Wind speed at each binned direction, $V_{\infty}(\theta)$ (invariant for these Case Studies).
             \end{itemize}
         \item Calculate the power produced from each turbine at each direction:
-            \begin{enumerate}
-                \item Rotate turbine locations\textbackslash frame of reference so freestream follows the $+x$ direction
+            \begin{enumerate}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+                \item For each binned direction $\theta$, rotate frame of reference so ``North'' aligns with $\texttt{-}x$ axis:
+                    \begin{enumerate}[leftmargin=+2.5em]
+                    \setlength{\itemindent}{-.75em}
+                        \item $\theta = 270^{\circ} - \theta $
+                        \item If $\theta \leq 0^{\circ}$ \\
+                                Then $\theta = \theta + 360^{\circ}$
+                    \end{enumerate}
+                \item Rotate turbine locations ($x$,$y$) to match new wind frame of reference ($x_w$,$y_w$):
+                    \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+                        \item $x_w = x \cdot cos(\texttt{-}\theta) - y \cdot sin(\texttt{-}\theta)$
+                        \item $y_w = x \cdot sin(\texttt{-}\theta) + y\cdot cos(\texttt{-}\theta)$
+                    \end{itemize}
                 \item Iterating through each turbine in the field:
-                    \begin{itemize}
-                        \item Apply the B. Gaussian wake \cref{Eq:Bast} between each pair of turbines.
-                        \item Use \cref{Eq:CmbndWake} to calculate the effective wind speed at each turbine.
-                        \item Use eff. wind speed and power curve to calculate power from each turbine.
+                    \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+                        \item Apply the B. Gaussian \cref{Eq:Bast} between each turbine pair for wake deficit ($\frac{\Delta U}{U_{\infty}}$).
+                        \item Use \cref{Eq:CmbndWake} to calculate total wake loss $(\frac{\Delta U}{U_{\infty}})_{cmbnd}$ at each turbine.
+                        \item Use wake loss and freestream speed to calculate effective wind speed ($V_{e}$):
+                            \begin{equation*}
+                                V_{e} = V_{\infty} \cdot \bigg[1 - \bigg(\frac{\Delta U}{U_{\infty}}\bigg)_{cmbnd}\bigg]
+                            \end{equation*}
+                        \item Use $V_{e}$ and the IEA37 3.35MW power curve to calculate each turbine's power:
+                            \begin{equation}
+                                \label{Eq:Power}
+                                P_{turb}(V_{e}) = 
+                                \begin{cases} 
+                                    0 & V_{e} < V_{\textit{cut-in}} \\
+                                    P_{\textit{rated}}\cdot\bigg(\frac{V_{e}-V_{\textit{cut-in}}}{V_{\textit{rated}}-V_{\textit{cut-in}}}\bigg)^3 & V_{\textit{cut-in}}\leq V_{e} \leq V_{\textit{rated}} \\
+                                    P_{\textit{rated}} & V_{\textit{rated}} < V_{e} < V_{\textit{cut-out}} \\
+                                    0 & V_{\textit{cut-out}} \leq V_{e}
+                                \end{cases}
+                            \end{equation}
                     \end{itemize}
             \end{enumerate}
-        \item Use calculated power from every direction to compute AEP:
-        \begin{itemize}
-            \item For each binned direction, sum power from all turbines for farm's total power generated.
-            \item For each binned direction, multiply farm power by wind frequency probability.
-            \item Sum power/probability predictions for all wind directions.
-            \item Multiply the sum by hours in a year (365$\cdot$24), for AEP.
+        \item Use calculated turbine power $\big(P_{turb}\big)$ from every wind direction ($\theta$) to compute AEP:
+        \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+            \item For each direction bin $\theta$, sum power from all $n$ turbines, multiply by wind freq. $f(\theta)$:
+                \begin{equation*}
+                    P_{farm}(\theta) = \sum\nolimits_{0}^{n} P_{turb}(\theta) \cdot f(\theta)
+                \end{equation*}
+            \item Multiply by hours in a year for AEP at each bin, sum all $i$ bins for total AEP.
+                \begin{equation*}
+                    AEP = \left(\sum\nolimits_{0}^{i} P_{farm}({\theta}_{i})\right) \cdot 8760 \frac{\textrm{hrs}}{\textrm{yr}}
+                \end{equation*}
         \end{itemize}
     \end{enumerate}
 
 \newpage
 \section*{Wake Model Equations}
-    The wake model for the Optimization Only Case Study is a simplified version of Bastankhah's Gaussian wake model \cite{Thomas2018}. The governing equations for the velocity deficit in a waked region are:
+    The wake model for the Optimization Only Case Study is a simplified version of Bastankhah's Gaussian wake model \cite{Thomas2018}. The governing equations for the velocity deficit in a waked region are:\\
     \begin{equation}
         \frac{\Delta U}{U_{\infty}}
         =
@@ -79,13 +114,13 @@
         \Bigg)
                 \text{exp}\bigg(
                     -0.5\Big(
-                        \frac{y}{\sigma_{y}}
+                        \frac{y_{i}-y_{g}}{\sigma_{y}}
                     \Big)^2
                 \bigg)
         \label{Eq:Bast}
     \end{equation}
     \begin{equation}
-        \sigma_y = k_y\cdot x + \frac{D}{\sqrt{8}} \\
+        \sigma_y = k_y\cdot (x_{i}-x_{g}) + \frac{D}{\sqrt{8}} \\
         \label{Eq:SigY}
     \end{equation}
     
@@ -96,17 +131,27 @@
         \begin{tabular}{|c|l|l|}
             \hline
              Variable & Value & Definition \\ \hline
-            $\frac{\Delta U}{U_{\infty}}$ & - & Wake velocity deficit \\ \hline
+            $\frac{\Delta U}{U_{\infty}}$ & \cref{Eq:Bast} & Wake velocity deficit \\ \hline
             $C_T$ & $\frac{8}{9}$ & Thrust coefficient \\ \hline
-            $x$ & - & Dist. from hub generating wake to hub of interest, along freestream \\ \hline
-            $y$ & - & Dist. from hub generating wake to hub of interest, perpendicular to freestream \\ \hline
-            $D$ & $130$ m & Turbine diameter \\ \hline
+            $x_{i}-x_{g}$ & - & Dist. from hub generating wake ($x_g$) to hub of interest ($x_i$), along freestream \\ \hline
+            $y_{i}-y_{g}$ & - & Dist. from hub generating wake ($y_g$) to hub of interest ($y_i$), $\perp$ to freestream  \\ \hline
             $\sigma_y$ & \cref{Eq:SigY} & Standard deviation of the wake deficit \\ \hline
             $k_y$ & 0.0324555 & Variable based on a turbulence intensity of 0.075 \cite{Thomas2018, Niayifar2016} \\ \hline
+            $D$ & $130$ m & Turbine diameter \cite{NREL335MW}\\ \hline
         \end{tabular}
     \end{table}
 \vspace{-0.25cm}
-    Note that if the hub of interest is upstream from the hub generating the wake ($x \leq 0$), it feels no wake effects ($\frac{\Delta U}{U_{\infty}} = 1$). Partial wake is not considered. Hub coordinates are used for all location calculations. For turbines placed in multiple wakes, the compound velocity deficit is calculated using the square root of the sum of the squares, depicted in \cref{Eq:CmbndWake}:
+    Note that if the hub of interest is upstream from the hub generating the wake ($[x_i - x_g] \leq 0$), it feels no wake effects ($\frac{\Delta U}{U_{\infty}} = 0$). In other words:
+    \newline
+    \begin{equation*}
+        \left(\frac{\Delta U}{U_{\infty}}\right) =
+        \begin{cases}
+            0, & (x_i - x_g) \leq 0 \\
+            \cref{Eq:Bast}, & (x_i - x_g) > 0 \\
+        \end{cases}
+    \end{equation*}
+    \newline
+    Partial wake is not considered. Hub coordinates are used for all location calculations. For turbines placed in multiple wakes, the compound velocity deficit is calculated using the square root of the sum of the squares, depicted in \cref{Eq:CmbndWake}:
     
     \begin{equation}
     \label{Eq:CmbndWake}
@@ -119,6 +164,6 @@
     \end{equation}
 
 \bibliographystyle{aiaa}
-\bibliography{announcement}
+\bibliography{iea37-wflocs-announcement}
 
 \end{document}
