@@ -96,6 +96,7 @@ def calcAEP(turbineX, turbineY, windFreq, windSpeed, windDir, turbCutInWS, turbC
 def getTurbLocYAML(sFileName):
     turbineX = np.array([])
     turbineY = np.array([])
+    sWindRose = str([])                             # Initialize filename in case it's improperly read
 
     # Read in the .yaml file
     with open(sFileName, 'r') as f:
@@ -107,7 +108,19 @@ def getTurbLocYAML(sFileName):
     # rip the expected AEP, used for comparison
     # AEP = doc['definitions']['plant_energy']['properties']['annual_energy_production']['default']
 
-    return turbineX, turbineY#, AEP
+    # Read the filenames for the windrose and the turbine attributes
+    lTurbRefs = doc['definitions']['wind_plant']['properties']['layout']['items']
+    lWindRefs = doc['definitions']['plant_energy']['properties']['wind_resource_selection']['properties']['items']
+
+    # Loop through all references until we find a file reference not in this directory
+    for i in range(len(lTurbRefs)):
+        if (lTurbRefs[i]['$ref'][0] != '#'):    # If it doesn't reference a seciton in this document
+            sTurbFile = lTurbRefs[i]['$ref']    # That's the file we want
+    for i in range( len(lWindRefs) ):
+        if (lWindRefs[i]['$ref'][0] != '#'):    # If it doesn't reference a seciton in this document
+            sRoseFile = lWindRefs[i]['$ref']    # That's the file we want
+    
+    return turbineX, turbineY, sRoseFile, sTurbFile  # REturn turbine (x,y) locations, and the filenames for the others .yamls
 def getWindRoseYAML(sFileName):
     windFreq = np.array([])
 
@@ -127,7 +140,7 @@ def getTurbAtrbtYAML(sFileName):
         doc = yaml.load(f)
 
     # rip the turbine attributes
-    CutInWS = float(doc['definitions']['operating_mode']['properties']['cut_in_wind_speed']['default']) # Convert from <list> to <ndarray>
+    CutInWS = float(doc['definitions']['operating_mode']['properties']['cut_in_wind_speed']['default']) # Convert from <list> to <float>
     CutOutWS = float(doc['definitions']['operating_mode']['properties']['cut_out_wind_speed']['default']) # Convert from <list> to <float>
     RtdWS = float(doc['definitions']['operating_mode']['properties']['rated_wind_speed']['default']) # Convert from <list> to <float>
     RtdPwr = float(doc['definitions']['wind_turbine_lookup']['properties']['power']['maximum']) # Convert from <list> to <float>
@@ -140,12 +153,12 @@ if __name__ == "__main__":
     turbineY = np.array([])
 
     # For Python .yaml capability, in the terminal type "pip install pyyaml".
-    # An example command line syntax to run this file is "python iea37-aepcalc.py iea37-ex16.yaml iea37-windrose.yaml iea37-335mw.yaml"
+    # An example command line syntax to run this file is "python iea37-aepcalc.py iea37-ex16.yaml"
 
     # Read necessary values from .yaml files
-    turbineX, turbineY = getTurbLocYAML(sys.argv[1])                # Get turbine locations from .yaml file
-    windDir, windFreq, windSpeed = getWindRoseYAML(sys.argv[2])     # Get the array wind sampling bins, frequency at each bin, and wind speed
-    turbCutInWS, turbCutOutWS, turbRtdWS, turbRtdPwr = getTurbAtrbtYAML(sys.argv[3])  # Pull needed values from the turbine file
+    turbineX, turbineY, sRoseFile, sTurbFile = getTurbLocYAML(sys.argv[1])                # Get turbine locations from .yaml file
+    windDir, windFreq, windSpeed = getWindRoseYAML(sRoseFile)     # Get the array wind sampling bins, frequency at each bin, and wind speed
+    turbCutInWS, turbCutOutWS, turbRtdWS, turbRtdPwr = getTurbAtrbtYAML(sTurbFile)  # Pull needed values from the turbine file
 
     # Calculate the AEP from ripped values
     AEP = calcAEP(turbineX, turbineY, windFreq, windSpeed, windDir,

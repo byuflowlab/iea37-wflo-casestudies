@@ -112,7 +112,7 @@ Please insure your implementation computes the same AEP value given in each of t
                     \begin{itemize}
                         \item Compute the wake deficit between each turbine pair \cref{Eq:Bast} (there is no wake effect of a turbine on itself).
                         \item Use \cref{Eq:CmbndWake} to calculate the total wake loss.
-                        \item Compute effective wind speed ($V_{e}$):
+                        \item Compute effective wind speed ($V_{e}$) at each turbine:
                             \begin{equation*}
                                 V_{e} = V_{\infty} \bigg[1 - \bigg(\frac{\Delta V}{V_{\infty}}\bigg)_{total}\bigg]
                             \end{equation*}
@@ -122,15 +122,15 @@ Please insure your implementation computes the same AEP value given in each of t
                                 P_{turb}(V_{e}) = 
                                 \begin{cases} 
                                     0 & V_{e} < V_{\textit{cut-in}} \\
-                                    P_{\textit{rated}}\cdot\bigg(\frac{V_{e}-V_{\textit{cut-in}}}{V_{\textit{rated}}-V_{\textit{cut-in}}}\bigg)^3 & V_{\textit{cut-in}}\leq V_{e} \leq V_{\textit{rated}} \\
-                                    P_{\textit{rated}} & V_{\textit{rated}} < V_{e} < V_{\textit{cut-out}} \\
+                                    P_{\textit{rated}}\cdot\bigg(\frac{V_{e}-V_{\textit{cut-in}}}{V_{\textit{rated}}-V_{\textit{cut-in}}}\bigg)^3 & V_{\textit{cut-in}}\leq V_{e} < V_{\textit{rated}} \\
+                                    P_{\textit{rated}} & V_{\textit{rated}} \leq V_{e} < V_{\textit{cut-out}} \\
                                     0 &  V_{e} \ge V_{\textit{cut-out}} 
                                 \end{cases}
                             \end{equation}
                         \end{itemize}
                     \item Sum powers from all $n$ turbines
                         \begin{equation}
-                            P_{farm} = \sum_{j=1}^n P_{turbine, j}
+                            P_{farm} = \sum_{j=1}^n P_{turb, j}
                         \end{equation}
             \end{enumerate}
         \item Compute AEP using farm power for all $m$ directions where $P$ is the wind farm power for direction $i$ and $f$ is the corresponding frequency for direction $i$.  The factor of 8760 is just to multiply by hours in a year:
