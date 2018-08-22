@@ -12,7 +12,7 @@ definitions:
         type: array
         items:
           - $ref: "#/definitions/position"
-          - $ref: "iea37-335MW.yaml"    # Reference for the .yaml containing turbine attributes.
+          - $ref: "iea37-335mw.yaml"    # Reference for the .yaml containing turbine attributes.
 
   position:
     type: array

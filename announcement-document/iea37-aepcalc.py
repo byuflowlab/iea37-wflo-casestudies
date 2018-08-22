@@ -7,6 +7,7 @@ from math import radians as DegToRad        # For converting from degrees to rad
 # Created 10 June 2018
 # Updated 11 Jul 2018 to include read-in of .yaml turb locs and wind freq dist.
 # Completed 26 Jul 2018 for commenting and release
+# Modified 22 Aug with suggestions from Erik Quaeghebeur
 
 def WindFrame(turbineX, turbineY, windDirDeg):
     """ Convert from meteorological polar system (CW, 0 deg.=N) to standard polar system (CCW, 0 deg.=W) """
@@ -62,11 +63,11 @@ def DirPower(turbineX, turbineY, windDirDeg, windSpeed, turbCI, turbCO, turbRtdW
 
     #  Calculate the power from each turb based on experienced wind speed & power curve
     for n in range(nTurbines):                                      # Looking at each turbine
-        if windSpeedEff[n] <= turbCI:                       # If we're below the cut-in speed
+        if windSpeedEff[n] < turbCI:                       # If we're below the cut-in speed
             pwrTurb[n] = 0.                                         # It won't produce power
-        elif turbCI < windSpeedEff[n] < turbRtdWS:          # If we're on the curve
+        elif turbCI <= windSpeedEff[n] < turbRtdWS:          # If we're on the curve
             pwrTurb[n] = turbRtdPwr*((windSpeedEff[n]-turbCI)/(turbRtdWS-turbCI))**3    # Calculate the curve speed
-        elif turbRtdWS < windSpeedEff[n] < turbCO:          # If we're between rated and cut-out wind speeds
+        elif turbRtdWS <= windSpeedEff[n] < turbCO:          # If we're between rated and cut-out wind speeds
             pwrTurb[n] = turbRtdPwr                                 # Produce rated power
         else:                                               # If we're above the curve (though the Case Studies don't go past cut-out speed)
             pwrTurb[n] = 0                                          # It generates no power

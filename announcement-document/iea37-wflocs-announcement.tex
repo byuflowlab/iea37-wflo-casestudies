@@ -74,8 +74,8 @@
                 P(V) = 
                 \begin{cases} 
                     0 & V < V_{\textit{cut-in}} \\
-                    P_{\textit{rated}}\cdot\bigg(\frac{V-V_{\textit{cut-in}}}{V_{\textit{rated}}-V_{\textit{cut-in}}}\bigg)^3 & V_{\textit{cut-in}}\leq V \leq V_{\textit{rated}} \\
-                    P_{\textit{rated}} & V_{\textit{rated}} < V < V_{\textit{cut-out}} \\
+                    P_{\textit{rated}}\cdot\bigg(\frac{V-V_{\textit{cut-in}}}{V_{\textit{rated}}-V_{\textit{cut-in}}}\bigg)^3 & V_{\textit{cut-in}}\leq V < V_{\textit{rated}} \\
+                    P_{\textit{rated}} & V_{\textit{rated}} \leq V < V_{\textit{cut-out}} \\
                     0 & V \geq V_{\textit{cut-out}}
                 \end{cases}
             \label{eq:power}
