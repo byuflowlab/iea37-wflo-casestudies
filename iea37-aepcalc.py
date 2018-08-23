@@ -4,7 +4,7 @@ Written by Nicholas F. Baker, PJ Stanley, and Jared Thomas (BYU FLOW lab)
 Created 10 June 2018
 Updated 11 Jul 2018 to include read-in of .yaml turb locs and wind freq dist.
 Completed 26 Jul 2018 for commenting and release
-Modified 22 Aug implementing multiple suggestions from Erik Quaeghebeur:
+Modified 22 Aug 2018 implementing multiple suggestions from Erik Quaeghebeur:
     - PEP 8 adherence for blank lines, length(<80 char), var names, docstring.
     - Altered multiple comments for clarity.
     - Used print_function for compatibility with Python 3.
@@ -14,9 +14,9 @@ Modified 22 Aug implementing multiple suggestions from Erik Quaeghebeur:
     - Simplified calculations for sin/cos_wind_dir (WindFrame).
     - Eliminated unecessary calculation of 0 values (GaussianWake, DirPower).
     - Turbine diameter now drawn from <.yaml> (GaussianWake)
-    - Use yaml.safe_load.
-    - Modified syntax of reading yaml docs for brevity.
-    - Remove some (now) unused array initializations.
+    - Used yaml.safe_load.
+    - Modified .yaml reading syntax for brevity.
+    - Removed some (now) unused array initializations.
 """
 
 from __future__ import print_function   # For Python 3 compatibility
@@ -25,7 +25,7 @@ import sys
 import yaml                             # For reading .yaml files
 from math import radians as DegToRad    # For converting degrees to radians
 
-# structured datatype for holding coordinate pair
+# Structured datatype for holding coordinate pair
 coordinate = np.dtype([('x', 'f8'), ('y', 'f8')])
 
 def WindFrame(turb_coords, wind_dir_deg):
@@ -148,13 +148,13 @@ def getTurbLocYAML(file_name):
     with open(file_name, 'r') as f:
         defs = yaml.safe_load(f)['definitions']
 
-    # rip the x- and y-coordinates (Convert from <list> to <ndarray>)
+    # Rip the x- and y-coordinates (Convert from <list> to <ndarray>)
     turb_xc = np.asarray(defs['position']['items']['xc'])
     turb_yc = np.asarray(defs['position']['items']['yc'])
     turb_coords = np.recarray(turb_xc.shape, coordinate)
     turb_coords.x, turb_coords.y = turb_xc, turb_yc
 
-    # rip the expected AEP, used for comparison
+    # Rip the expected AEP, used for comparison
     # AEP = defs['plant_energy']['properties']
     #           ['annual_energy_production']['default']
 
