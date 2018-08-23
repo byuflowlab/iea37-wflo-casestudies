@@ -5,7 +5,7 @@ Created 10 June 2018
 Updated 11 Jul 2018 to include read-in of .yaml turb locs and wind freq dist.
 Completed 26 Jul 2018 for commenting and release
 Modified 22 Aug implementing multiple suggestions from Erik Quaeghebeur:
-    - PEP 8 adherence for blank lines, length(<80 char), var names, docstrings.
+    - PEP 8 adherence for blank lines, length(<80 char), var names, docstring.
     - Altered multiple comments for clarity.
     - Used print_function for compatibility with Python 3.
     - Used structured datatype (coordinate) and recarray to couple x,y coords.
@@ -39,12 +39,12 @@ def WindFrame(turb_coords, wind_dir_deg):
     wind_dir_rad = DegToRad(wind_dir_deg)
 
     # Constants to use below
-    cos_dir = np.cos(-wind_dir_deg)
-    sin_dir = np.sin(-wind_dir_deg)
+    cos_dir = np.cos(-wind_dir_rad)
+    sin_dir = np.sin(-wind_dir_rad)
     # Convert to downwind(x) & crosswind(y) coordinates
     frame_coords = np.recarray(turb_coords.shape, coordinate)
     frame_coords.x = (turb_coords.x * cos_dir) - (turb_coords.y * sin_dir)
-    frame_coords.y = (turb_coords.y * sin_dir) + (turb_coords.y * cos_dir)
+    frame_coords.y = (turb_coords.x * sin_dir) + (turb_coords.y * cos_dir)
 
     return frame_coords
 
@@ -176,7 +176,7 @@ def getTurbLocYAML(file_name):
 
 
 def getWindRoseYAML(file_name):
-    """Retrieve wind rose data (bins, frequencies, speeds) from <.yaml> file."""
+    """Retrieve wind rose data (bins, freqs, speeds) from <.yaml> file."""
     # Read in the .yaml file
     with open(file_name, 'r') as f:
         props = yaml.safe_load(f)['definitions']['wind_inflow']['properties']
@@ -206,7 +206,7 @@ def getTurbAtrbtYAML(file_name):
     turb_co = float(op_props['cut_out_wind_speed']['default'])
     rated_ws = float(op_props['rated_wind_speed']['default'])
     rated_pwr = float(turb_props['power']['maximum'])
-    turb_diam = float(rotor_props['radius']) * 2
+    turb_diam = float(rotor_props['radius']['default']) * 2.
 
     return turb_ci, turb_co, rated_ws, rated_pwr, turb_diam
 
