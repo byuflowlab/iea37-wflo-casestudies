@@ -69,12 +69,7 @@ def GaussianWake(frame_coords, turb_diam):
             if x > 0.:                  # If Primary is downwind of the Target
                 sigma = k*x + turb_diam/np.sqrt(8.) # Calculate the wake loss
                 # Simplified Bastankhah Gaussian wake model
-                loss_array[j] = (1.
-                                - np.sqrt(1.
-                                    - CT
-                                    / (8. * sigma**2 / turb_diam**2)
-                                    )
-                                ) * np.exp(-0.5 * (y/sigma)**2)
+                loss_array[j] = (1. - np.sqrt(1. - CT/(8.*sigma**2 / turb_diam**2))) * np.exp(-0.5*(y/sigma)**2)
             # Note that if the Target is upstream, loss is defaulted to zero
         # Total wake losses from all upstream turbs, using sqrt of sum of sqrs
         loss[i] = np.sqrt( np.sum(loss_array**2) )
@@ -99,15 +94,13 @@ def DirPower(turb_coords, wind_dir_deg, wind_speed,
     # Check to see if turbine produces power for experienced wind speed
     for n in range(num_turb):
         # If we're between the cut-in and rated wind speeds
-        if ( (turb_ci <= wind_speed_eff[n])
-                and (wind_speed_eff[n] < rated_ws) ):
+        if ((turb_ci <= wind_speed_eff[n])
+                and (wind_speed_eff[n] < rated_ws)):
             # Calculate the curve's power
-            turb_pwr[n] = (rated_pwr
-                           * ( (wind_speed_eff[n]-turb_ci) 
-                               / (rated_ws-turb_ci) ) ** 3)
+            turb_pwr[n] = rated_pwr * ((wind_speed_eff[n]-turb_ci)/(rated_ws-turb_ci))**3
         # If we're between the rated and cut-out wind speeds
-        elif ( (rated_ws <= wind_speed_eff[n])
-                and (wind_speed_eff[n] < turb_co) ):
+        elif ((rated_ws <= wind_speed_eff[n])
+                and (wind_speed_eff[n] < turb_co)):
             # Produce the rated power
             turb_pwr[n] = rated_pwr
 
@@ -233,6 +226,6 @@ if __name__ == "__main__":
     AEP = calcAEP(turb_coords, wind_freq, wind_speed, wind_dir,
                   turb_ci, turb_co, rated_ws, rated_pwr)
     # Print AEP for each binned direction, with 5 digits behind the decimal.
-    print(np.around(AEP,decimals=5))
+    print(np.around(AEP, decimals=5))
     # Print AEP summed for all directions
-    print(np.around(np.sum(AEP),decimals=5))
+    print(np.around(np.sum(AEP), decimals=5))
