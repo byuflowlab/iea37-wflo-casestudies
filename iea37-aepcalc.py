@@ -69,7 +69,9 @@ def GaussianWake(frame_coords, turb_diam):
             if x > 0.:                  # If Primary is downwind of the Target
                 sigma = k*x + turb_diam/np.sqrt(8.) # Calculate the wake loss
                 # Simplified Bastankhah Gaussian wake model
-                loss_array[j] = (1. - np.sqrt(1. - CT/(8.*sigma**2 / turb_diam**2))) * np.exp(-0.5*(y/sigma)**2)
+                exponent = -0.5 * (y/sigma)**2
+                radical = 1. - CT/(8.*sigma**2 / turb_diam**2)
+                loss_array[j] = ( 1.-np.sqrt(radical) ) * np.exp(exponent)
             # Note that if the Target is upstream, loss is defaulted to zero
         # Total wake losses from all upstream turbs, using sqrt of sum of sqrs
         loss[i] = np.sqrt( np.sum(loss_array**2) )
