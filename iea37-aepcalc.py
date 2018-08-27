@@ -228,6 +228,7 @@ if __name__ == "__main__":
     AEP = calcAEP(turb_coords, wind_freq, wind_speed, wind_dir,
                   turb_ci, turb_co, rated_ws, rated_pwr)
     # Print AEP for each binned direction, with 5 digits behind the decimal.
-    print(np.around(AEP, decimals=5))
+    print(np.array2string(AEP, precision=5, floatmode='fixed',
+                          separator=', ', max_line_width=62))
     # Print AEP summed for all directions
     print(np.around(np.sum(AEP), decimals=5))
