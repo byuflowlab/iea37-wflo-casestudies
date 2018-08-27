@@ -28,6 +28,7 @@ from math import radians as DegToRad    # For converting degrees to radians
 # Structured datatype for holding coordinate pair
 coordinate = np.dtype([('x', 'f8'), ('y', 'f8')])
 
+
 def WindFrame(turb_coords, wind_dir_deg):
     """Convert map coordinates to downwind/crosswind coordinates."""
 
@@ -61,26 +62,26 @@ def GaussianWake(frame_coords, turb_diam):
     # Array holding the wake deficit seen at each turbine
     loss = np.zeros(num_turb)
 
-    for i in range(num_turb):           # Looking at each turb (Primary)
-        loss_array = np.zeros(num_turb) # Calculate the loss from all others
-        for j in range(num_turb):       # Looking at all other turbs (Target)
+    for i in range(num_turb):            # Looking at each turb (Primary)
+        loss_array = np.zeros(num_turb)  # Calculate the loss from all others
+        for j in range(num_turb):        # Looking at all other turbs (Target)
             x = frame_coords.x[i] - frame_coords.x[j]   # Calculate the x-dist
             y = frame_coords.y[i] - frame_coords.y[j]   # And the y-offset
-            if x > 0.:                  # If Primary is downwind of the Target
-                sigma = k*x + turb_diam/np.sqrt(8.) # Calculate the wake loss
+            if x > 0.:                   # If Primary is downwind of the Target
+                sigma = k*x + turb_diam/np.sqrt(8.)  # Calculate the wake loss
                 # Simplified Bastankhah Gaussian wake model
                 exponent = -0.5 * (y/sigma)**2
                 radical = 1. - CT/(8.*sigma**2 / turb_diam**2)
-                loss_array[j] = ( 1.-np.sqrt(radical) ) * np.exp(exponent)
+                loss_array[j] = (1.-np.sqrt(radical)) * np.exp(exponent)
             # Note that if the Target is upstream, loss is defaulted to zero
         # Total wake losses from all upstream turbs, using sqrt of sum of sqrs
-        loss[i] = np.sqrt( np.sum(loss_array**2) )
+        loss[i] = np.sqrt(np.sum(loss_array**2))
 
     return loss
-    
+
 
 def DirPower(turb_coords, wind_dir_deg, wind_speed,
-             turb_ci, turb_co, rated_ws, rated_pwr):
+             turb_diam, turb_ci, turb_co, rated_ws, rated_pwr):
     """Return the power produced by each turbine."""
     num_turb = len(turb_coords)
 
@@ -99,7 +100,8 @@ def DirPower(turb_coords, wind_dir_deg, wind_speed,
         if ((turb_ci <= wind_speed_eff[n])
                 and (wind_speed_eff[n] < rated_ws)):
             # Calculate the curve's power
-            turb_pwr[n] = rated_pwr * ((wind_speed_eff[n]-turb_ci)/(rated_ws-turb_ci))**3
+            turb_pwr[n] = rated_pwr * ((wind_speed_eff[n]-turb_ci)
+                                       / (rated_ws-turb_ci))**3
         # If we're between the rated and cut-out wind speeds
         elif ((rated_ws <= wind_speed_eff[n])
                 and (wind_speed_eff[n] < turb_co)):
@@ -113,7 +115,7 @@ def DirPower(turb_coords, wind_dir_deg, wind_speed,
 
 
 def calcAEP(turb_coords, wind_freq, wind_speed, wind_dir,
-            turb_ci, turb_co, rated_ws, rated_pwr):
+            turb_diam, turb_ci, turb_co, rated_ws, rated_pwr):
     """Calculate the wind farm AEP."""
     num_bins = len(wind_freq)  # Number of bins used for our windrose
 
@@ -122,14 +124,14 @@ def calcAEP(turb_coords, wind_freq, wind_speed, wind_dir,
     # For each wind bin
     for i in range(num_bins):
         # Find the farm's power for the current direction
-        pwr_produced[i] = DirPower(turb_coords, wind_dir[i],
-                                    wind_speed, turb_ci, turb_co,
-                                    rated_ws, rated_pwr)
+        pwr_produced[i] = DirPower(turb_coords, wind_dir[i], wind_speed,
+                                   turb_diam, turb_ci, turb_co,
+                                   rated_ws, rated_pwr)
 
     #  Convert power to AEP
     hrs_per_year = 365.*24.
     AEP = hrs_per_year * (wind_freq * pwr_produced)
-    AEP /= 1.E6 # Convert to MWh
+    AEP /= 1.E6  # Convert to MWh
 
     return AEP
 
@@ -165,7 +167,7 @@ def getTurbLocYAML(file_name):
                       for ref in ref_list_turbs if ref['$ref'][0] != '#')
     fname_wr = next(ref['$ref']
                     for ref in ref_list_wr if ref['$ref'][0] != '#')
-    
+
     # Return turbine (x,y) locations, and the filenames for the others .yamls
     return turb_coords, fname_turb, fname_wr
 
@@ -226,8 +228,9 @@ if __name__ == "__main__":
 
     # Calculate the AEP from ripped values
     AEP = calcAEP(turb_coords, wind_freq, wind_speed, wind_dir,
-                  turb_ci, turb_co, rated_ws, rated_pwr)
+                  turb_diam, turb_ci, turb_co, rated_ws, rated_pwr)
     # Print AEP for each binned direction, with 5 digits behind the decimal.
-    print(np.around(AEP, decimals=5))
+    print(np.array2string(AEP, precision=5, floatmode='fixed',
+                          separator=', ', max_line_width=62))
     # Print AEP summed for all directions
     print(np.around(np.sum(AEP), decimals=5))
