@@ -81,7 +81,7 @@ def GaussianWake(frame_coords, turb_diam):
 
 
 def DirPower(turb_coords, wind_dir_deg, wind_speed,
-             turb_ci, turb_co, rated_ws, rated_pwr):
+             turb_diam, turb_ci, turb_co, rated_ws, rated_pwr):
     """Return the power produced by each turbine."""
     num_turb = len(turb_coords)
 
@@ -115,7 +115,7 @@ def DirPower(turb_coords, wind_dir_deg, wind_speed,
 
 
 def calcAEP(turb_coords, wind_freq, wind_speed, wind_dir,
-            turb_ci, turb_co, rated_ws, rated_pwr):
+            turb_diam, turb_ci, turb_co, rated_ws, rated_pwr):
     """Calculate the wind farm AEP."""
     num_bins = len(wind_freq)  # Number of bins used for our windrose
 
@@ -124,8 +124,8 @@ def calcAEP(turb_coords, wind_freq, wind_speed, wind_dir,
     # For each wind bin
     for i in range(num_bins):
         # Find the farm's power for the current direction
-        pwr_produced[i] = DirPower(turb_coords, wind_dir[i],
-                                   wind_speed, turb_ci, turb_co,
+        pwr_produced[i] = DirPower(turb_coords, wind_dir[i], wind_speed,
+                                   turb_diam, turb_ci, turb_co,
                                    rated_ws, rated_pwr)
 
     #  Convert power to AEP
@@ -228,7 +228,7 @@ if __name__ == "__main__":
 
     # Calculate the AEP from ripped values
     AEP = calcAEP(turb_coords, wind_freq, wind_speed, wind_dir,
-                  turb_ci, turb_co, rated_ws, rated_pwr)
+                  turb_diam, turb_ci, turb_co, rated_ws, rated_pwr)
     # Print AEP for each binned direction, with 5 digits behind the decimal.
     print(np.array2string(AEP, precision=5, floatmode='fixed',
                           separator=', ', max_line_width=62))
