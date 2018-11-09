@@ -1,0 +1,52 @@
+input_format_version: 0
+title: participant 2's submission for IEA Wind Task 37 Combined Case Study 9 Turbine Farm
+description: participant 2's 9 turbine submission
+
+definitions:
+  wind_plant:
+    type: object
+    description: specific plant design including turbine selection and placement
+    properties:
+      layout:
+        type: array
+        items:
+          - $ref: "#/definitions/position"
+          - $ref: "iea37-335mw.yaml"    # Reference for the .yaml containing turbine attributes.
+
+  position:
+    type: array
+    items:
+      xc: [65.2786, 528.1835, -95.9952, -557.6479, -701.3417, -852.3956, 124.4720, 704.2611, 680.7370]
+      yc: [-359.7643, -728.7127, -894.8659, -193.8215, -527.3305, 288.8281, 891.3511, 545.6805, 68.9745]
+    additionalItems: false
+    description: an array of x-coordinates [x0, x1, ...] and y-coordinates [y0, y1, ...] of wind turbine positions in cartesian coordinates
+    units: m          
+
+  plant_energy:
+    type: object
+    description: energy production from participant 2's wake model
+
+    properties:
+      # wake_model_selection:
+      #   type: algorithm
+      #   description: wake model used to calculate AEP
+      #   items:
+      #     - $ref:
+
+      wind_resource_selection:
+        type: object
+        description: specific wind resource used to calculate AEP
+        properties:
+          type: array
+          items:
+            - $ref: "iea37-windrose.yaml"       # Reference for the .yaml containing the wind rose
+
+      annual_energy_production:
+        type: number
+        description: binned and total (default) annual energy production for a wind plant given a layout and binned wind rose
+        binned: [ 5249.18811,  5044.54745,  7058.46929,  8069.94971,
+                  16577.25031, 13634.31020, 23520.87561, 29757.38154,
+                  13335.81117,  7888.17358,  9562.34891, 18458.56348,
+                  56046.86117,  9249.03121,  7524.39596,  5365.64146]
+        default: 236342.79917
+        units: MWh
