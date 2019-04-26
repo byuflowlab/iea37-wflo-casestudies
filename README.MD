@@ -1,5 +1,5 @@
-IEA37 WFLO Case Studies
-=======================
+IEA37 WFLO Case Studies 1 and 2
+===============================
 
 This repository holds the files necessary to participate in the initial optimization case studies for IEA Task 37.
 
