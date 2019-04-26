@@ -9,7 +9,6 @@ definitions:
       turbine:
         type: array
         items:
-          - $ref: "#/definitions/position"
           - $ref: "iea37-10mw.yaml"    # Reference for the .yaml containing turbine attributes.
 
   position:
