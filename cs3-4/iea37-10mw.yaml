@@ -1,0 +1,45 @@
+title: IEA Wind Task 37 Wind Plant Ontology version for case studies 3 and 4
+description: Turbine definition for 10MW Offshore Reference Turbine
+
+definitions:
+# turbine definition
+  wind_turbine:
+    description: Description of IEA37 10MW Onshore Reference Turbine
+    id: 10MW
+
+    rated_power:
+      units: W
+      minimum: 0.0
+      maximum: 10000000.0
+
+# rotor definition
+  rotor:
+    diameter:
+      units: m
+      default: 198.0
+
+    radius:
+      units: m
+      default: 99.0
+
+# hub definition
+  hub:
+    height:
+      units: m
+      default: 119.0
+
+# operating mode can vary and the power/thrust curves will change as a result
+  operating_mode:
+    id: normal
+
+    cut_in_wind_speed:
+      units: m/s
+      default: 4.0
+
+    cut_out_wind_speed:
+      units: m/s
+      default: 25.0
+
+    rated_wind_speed:
+      units: m/s
+      default: 11.0

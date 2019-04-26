@@ -1,0 +1,31 @@
+title: IEA Wind Task 37 case study 3 wind farm site
+description:
+  - Adapted from Borssele IIIa
+  - Created by Sebastian Sanchez and Erik Quaeghebeur
+  - Modified by N.F. Baker for IEA37 case study 3
+
+location:
+  - reference_system: ETRS89
+  - utm_zone: 31U
+  - utm: [484178.50, 5716513.50]
+
+boundaries:
+  - IIIa:
+      - [10363.8,  6490.3]
+      - [ 9449.7,  1602.2]
+      - [ 9387.0,  1056.6]
+      - [ 9365.1,   625.5]
+      - [ 9360.8,   360.2]
+      - [ 9361.5,   126.9]
+      - [ 9361.3,   137.1]
+      - [ 7997.6,  1457.9]
+      - [ 6098.3,  3297.5]
+      - [ 8450.3,  6455.3]
+      - [ 8505.4,  6422.3]
+      - [ 9133.0,  6127.4]
+      - [ 9332.8,  6072.6]
+      - [ 9544.2,  6087.1]
+      - [ 9739.0,  6171.2]
+      - [ 9894.9,  6316.9]
+      - [10071.8,  6552.5]
+      - [10106.9,  6611.1]

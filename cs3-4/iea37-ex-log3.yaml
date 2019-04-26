@@ -1,0 +1,96 @@
+title: IEA Wind Task 37 case study 3, optimization log
+description: Example target-function convergence log for the 25 turbine wind plant model for IEA Task 37 case study 3
+  
+hardware_summary:
+  processor:
+    manufacturer: Apple
+    model: Intel Core i7
+    speed:
+      default: 3.1
+      units: Ghz
+    num_cores: 1
+    default: 1  # This is the number of processors used. If more than one type used, describe fastest one.
+  RAM:
+    type: DDR3
+    size:
+      default: 16
+      units: GB
+    speed:
+      default: 1867
+      units: MHz
+
+optimization_summary:
+  gradient_based: true
+  algorithm_name: fmincon
+  program_language: MATLAB
+  total_optimizations: 2  # This matches the number of "_log_" entries, and accounts for restarts or different starting layouts.
+  total_wall_time:        # From start of first optimization to convergence of final optimization
+    default: 300
+    units: s
+
+  optimization_log_1:
+    function_calls: 26   # Note yours could be orders of magnitude more. 26 is used only as a starting example
+    annual_energy_production:
+      - [945163.30426]
+      - [922470.13486]
+      - [929399.58022]
+      - [950292.75484]
+      - [931307.68837]
+      - [951968.34221]
+      - [936124.6179]
+      - [944744.39259]
+      - [941138.84678]
+      - [941897.0321]
+      - [945942.94077]
+      - [941481.96524]
+      - [949603.22752]
+      - [942175.6923]
+      - [946792.22672]
+      - [943535.91008]
+      - [945067.08286]
+      - [944945.99559]
+      - [944475.40174]
+      - [946817.8821]
+      - [944232.64669]
+      - [947260.05278]
+      - [944530.87478]
+      - [945995.52061]
+      - [945203.78499]
+      - [945769.78351]
+      units: MWh
+
+  optimization_log_2:
+    function_calls: 30
+    annual_energy_production:
+      - [1017926.05459]
+      - [1020231.4478]
+      - [1017380.03366]
+      - [1020941.4921]
+      - [1017601.23056]
+      - [1019415.60343]
+      - [1018285.36295]
+      - [1018627.43565]
+      - [1019221.34578]
+      - [1018193.70791]
+      - [1020285.29836]
+      - [1018271.23152]
+      - [1019940.74798]
+      - [1018520.44561]
+      - [1019246.9473]
+      - [1018863.04768]
+      - [1018564.41906]
+      - [1019486.52658]
+      - [1018770.31388]
+      - [1020109.52476]
+      - [1018555.253]
+      - [1019594.15567]
+      - [1019009.5311]
+      - [1019241.90886]
+      - [1019263.64552]
+      - [1018618.08031]
+      - [1019937.12733]
+      - [1019045.03444]
+      - [1020030.57945]
+      - [1018773.11703]
+      - [1019438.63882]
+      units: MWh

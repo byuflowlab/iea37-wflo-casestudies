@@ -1,0 +1,72 @@
+title: IEA Wind Task 37 case study 3, baseline layout
+description: baseline layout for the 25 turbine wind plant model for IEA Task 37 case study 3
+
+definitions:
+  wind_plant:
+    type: object
+    description: specific plant design including turbine selection and placement
+    properties:
+      turbine:
+        type: array
+        items:
+          - $ref: "#/definitions/position"
+          - $ref: "iea37-10mw.yaml"    # Reference for the .yaml containing turbine attributes.
+
+  position:
+    description: an array of x and y-coordinates [x0, y0] \n [x1, y1] \n ... of wind turbine positions in cartesian coordinates
+    units: m
+    items:
+      - [10363.7833, 6490.2719]
+      - [ 9894.9437, 6316.9180]
+      - [ 8450.2895, 6455.3421]
+      - [ 9008.9311, 6043.4997]
+      - [ 9567.5726, 5631.6572]
+      - [10126.2142, 5219.8148]
+      - [ 7862.2807, 5665.8933]
+      - [ 8537.7355, 5093.7148]
+      - [ 9213.1903, 4521.5362]
+      - [ 9888.6451, 3949.3577]
+      - [ 7274.2718, 4876.4446]
+      - [ 8066.5399, 4143.9299]
+      - [ 8858.8079, 3411.4153]
+      - [ 9651.0760, 2678.9006]
+      - [ 6686.2630, 4086.9958]
+      - [ 7371.5049, 3416.8405]
+      - [ 8056.7467, 2746.6851]
+      - [ 8741.9886, 2076.5297]
+      - [ 9427.2305, 1406.3743]
+      - [ 6098.2541, 3297.5471]
+      - [ 6750.8566, 2665.4498]
+      - [ 7403.4592, 2033.3525]
+      - [ 8056.0622, 1401.2557]
+      - [ 8708.6700,  769.1637]
+      - [ 9361.2778,  137.0718]
+
+  plant_energy:
+    description: energy production data
+    properties:
+      wake_model:
+        description: wake model used to calculate AEP
+        items:
+          - $ref: "iea37-aepcalc.py"
+
+      wind_resource:
+        description: specific wind resource used to calculate AEP
+        properties:
+          items:
+            - $ref: "iea37-windrose-cs3.yaml"       # Reference for the .yaml containing the wind rose
+      
+      annual_energy_production:
+        description: binned and total (default) annual energy production for a wind plant given a layout and binned wind rose
+        units: MWh
+        binned: [  6381.44144,  5709.99984,  5094.55272,  5080.01333,  4874.65503,  4562.01399,
+                   4168.53565,  3968.56479,  4094.55316,  4328.84288,  4693.49374,  5339.83058,
+                   6136.80318,  7641.88254,  8950.04492, 10397.05191, 13570.05330, 16069.77732,
+                  17855.56184, 19802.76064, 19302.06033, 16244.05012, 11595.17356, 13463.85439,
+                  16090.58577, 15365.49916, 15120.25832, 15265.95492, 16323.30352, 17399.50381,
+                  18239.02982, 20381.57735, 21316.81809, 23291.21854, 24141.00778, 24409.22793,
+                  23579.56638, 23375.45501, 24273.23471, 24911.56055, 24634.92054, 24311.68135,
+                  23247.12186, 23565.59789, 22818.93910, 22229.05383, 23809.59524, 24625.44256,
+                  24690.63378, 25147.79990, 23827.92176, 20595.21810, 15347.16175, 17669.43797,
+                  20555.41286, 18550.77164, 15726.61943, 12687.96674, 10254.83114,  8057.80400]
+        default: 945163.30426
