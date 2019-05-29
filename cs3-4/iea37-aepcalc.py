@@ -1,6 +1,6 @@
 """IEA Task 37 Case Study 3 AEP Calculation Code
 
-Written by Nicholas F. Baker, PJ Stanley, Jared Thomas (BYU FLOW lab) and Erik Quaeghebeur ()
+Written by Nicholas F. Baker, PJ Stanley, Jared Thomas (BYU FLOW lab) and Erik Quaeghebeur (TU Delft)
 Released 22 Aug 2018 with case studies 1 & 2
 Modified 15 Apr 2019 for case studies 3 and 4
 """
