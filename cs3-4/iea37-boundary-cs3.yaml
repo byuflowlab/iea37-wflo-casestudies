@@ -5,12 +5,12 @@ description:
   - Modified by N.F. Baker for IEA37 case study 3
 
 location:
-  - reference_system: ETRS89
-  - utm_zone: 31U
-  - utm: [484178.50, 5716513.50]
+  reference_system: ETRS89
+  utm_zone: 31U
+  utm: [484178.50, 5716513.50]
 
 boundaries:
-  - IIIa:
+  IIIa:
       - [10363.8,  6490.3]
       - [ 9449.7,  1602.2]
       - [ 9387.0,  1056.6]

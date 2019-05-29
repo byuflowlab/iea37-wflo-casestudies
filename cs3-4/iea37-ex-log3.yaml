@@ -20,7 +20,7 @@ hardware_summary:
       units: MHz
 
 optimization_summary:
-  gradient_based: true
+  gradient_based: true    # three options are: 'true', 'false', 'hybrid'
   algorithm_name: fmincon
   program_language: MATLAB
   total_optimizations: 2  # This matches the number of "_log_" entries, and accounts for restarts or different starting layouts.

@@ -167,7 +167,7 @@ def getTurbLocYAML(file_name):
     return turb_coords, fname_turb, fname_wr
 
 
-def getWindRoseWeibYAML(file_name):
+def getWindRoseYAML(file_name):
     """Retrieve wind rose data (bins, freqs, speeds) from <.yaml> file."""
     # Read in the .yaml file
     with open(file_name, 'r') as f:
@@ -221,7 +221,7 @@ if __name__ == "__main__":
     # Get turbine locations and auxiliary <.yaml> filenames
     turb_coords, fname_turb, fname_wr = getTurbLocYAML(sys.argv[1])
     # Get the array wind sampling bins, frequency at each bin, and wind speed
-    wind_dir, wind_dir_freq, wind_speeds, wind_speed_probs, num_speed_bins, min_speed, max_speed = getWindRoseWeibYAML(
+    wind_dir, wind_dir_freq, wind_speeds, wind_speed_probs, num_speed_bins, min_speed, max_speed = getWindRoseYAML(
         fname_wr)
     # Pull the needed turbine attributes from file
     turb_ci, turb_co, rated_ws, rated_pwr, turb_diam = getTurbAtrbtYAML(
