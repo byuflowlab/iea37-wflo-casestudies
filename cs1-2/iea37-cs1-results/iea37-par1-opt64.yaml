@@ -1,0 +1,82 @@
+input_format_version: 0
+title: IEA Wind Task 37 Optimization Only Case Study 64 Turbine Farm
+description: Participant 1's 64 turbine submission
+
+definitions:
+  wind_plant:
+    type: object
+    description: specific plant design including turbine selection and placement
+    properties:
+      layout:
+        type: array
+        items:
+          - $ref: "#/definitions/position"
+          - $ref: "iea37-335mw.yaml"    # Reference for the .yaml containing turbine attributes.
+
+  position:
+    type: array
+    items:
+      xc: [ 1598.8999712,   153.7783655,   281.5539434,  2605.4584793,
+            -2841.7723001,   420.5237581,  1322.2633178, -2684.9727809,
+            -886.9724115, -2999.9999112, -1974.6930208,  -224.6987407,
+            -575.5621932,  2867.4895648,  1978.425755 , -1107.5509715,
+            -873.3929978,   839.5084787,  1853.2165579, -2792.1632089,
+            484.4888934,   853.6426017,  -202.7906759,  2407.6687974,
+            1634.7345119,   705.9135006,  1019.084463 ,   161.4471461,
+            347.3164553,  2293.7246635,  1967.2202437, -1800.3234589,
+            2387.742418 , -1254.6997677,  1479.0520899,  -460.9616486,
+            -1102.8169751, -2961.528757 ,  2751.1098809,  1710.9971551,
+            -1444.0046945, -1705.150848 ,  2568.5617367,  -359.8902198,
+            -2180.461477 , -1447.3373154,   -58.6233029,   -93.2230379,
+            -1260.3424229,  2146.4605834, -2603.6362776,   565.522933 ,
+            -1620.3776614,  1842.0194969, -1958.9508644,   257.9217068,
+            -223.5406319,  2997.7021584,  -754.7356035,    57.3809833,
+            -1580.503922 , -2857.1153258,  1236.189028 , -2282.1350466]
+      yc: [ 7.65858400e+02, -1.60147862e+03, -4.94818104e+02, -1.28623491e+03,
+            9.61422042e+02,  2.84012691e+03, -6.28983986e+02,  1.32222574e+03,
+            1.68418350e+03, -1.25790899e+00, -7.54738890e+02,  3.99908509e+02,
+            -2.70840112e+03, -4.28102513e+02,  2.25517885e+03, -9.76542119e+02,
+            -2.29561685e+03,  2.88014339e+03,  1.99843687e+03,  2.32369825e+02,
+            -2.04686147e+03, -1.46034698e+03, -2.16384683e+03,  2.71975663e+02,
+            -2.41310492e+03, -7.54036252e+02, -2.82160714e+03,  2.42333076e+03,
+            -2.96621967e+03,  1.23666373e+03, -1.13266186e+03,  1.50684814e+03,
+            -1.81622856e+03, -2.40852366e+02,  2.58472704e+03, -3.71472462e+02, 
+            5.50867093e+02, -4.78902322e+02, -9.62519450e+02,  1.36595653e+03,
+            -1.43966144e+03, -1.80683008e+03,  1.52628050e+03, -8.61853182e+02,
+            2.06048264e+03,  2.62777765e+03, -2.99942723e+03,  1.12028519e+03,
+            -2.57095530e+03,  4.22124268e+01, -6.20932612e+02, -1.02793662e+02,
+            2.20454675e+03, -2.68803538e+02,  8.05454843e+02,  9.84504390e+02,
+            2.99166008e+03, -1.17395813e+02, -2.89680730e+03,  1.83793973e+03,
+            -2.44083140e+03,  6.66738288e+02,  2.71157224e+03, -1.94727051e+03]
+    additionalItems: false
+    description: Andrew PJ Stanley optimal x y turbine locations
+    units: m
+
+  plant_energy:
+    type: object
+    description: energy production from simplified Bastankhah Gaussian wake model
+
+    properties:
+      wake_model_selection:
+        type: algorithm
+        description: wake model used to calculate AEP
+        items:
+          - $ref: "iea37-aepcalc.py"
+
+      wind_resource_selection:
+        type: object
+        description: specific wind resource used to calculate AEP
+        properties:
+          type: array
+          items:
+            - $ref: "iea37-windrose.yaml"       # Reference for the .yaml containing the wind rose
+
+      annual_energy_production:
+        type: number
+        description: binned and total (default) annual energy production for a wind plant given a layout and binned wind rose
+        binned: [ 37007.24551228,  31691.66634827,  39025.74089061,  54419.53283186,
+                  96249.08592364,  90026.57057293, 149575.44867428, 185131.74798426,
+                  93415.54582139,  50971.46353611,  53219.19657214, 124567.45320669,
+                  326541.32638448,  63826.14259482,  47798.89769299,  33222.59813423]
+        default: 1476689.662680982
+        units: MWh

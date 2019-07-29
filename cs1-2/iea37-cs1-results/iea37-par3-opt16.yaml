@@ -1,0 +1,58 @@
+input_format_version: 0
+title: IEA Wind Task 37 Combined Case Study 16 Turbine Farm
+description: Participant 3's 16 turbine submission
+
+definitions:
+  wind_plant:
+    type: object
+    description: specific plant design including turbine selection and placement
+    properties:
+      layout:
+        type: array
+        items:
+          - $ref: "#/definitions/position"
+          - $ref: "iea37-335mw.yaml"    # Reference for the .yaml containing turbine attributes.
+
+  position:
+    type: array
+    items:
+      xc: [ -142.7813725 ,   783.64300237,    60.29577393,  -938.2940835 ,
+            -825.05411678,   -70.33822976,  1275.09517891,  1131.06286834,
+             365.0601563 ,  -562.81249116,  -869.03159701, -1276.79397881,
+            -1043.71254494,  -358.00700379,   591.19707279,   936.53079797]
+      yc: [  -56.28743318,    10.08384132,   706.05228392,   480.95867519,
+            -468.04526973,  -645.14117448,  -253.24352849,   640.85629268,
+            1247.69029903,  1132.24648875,   913.7128998 ,   244.53452857,
+            -775.02524059, -1249.73236544, -1101.92422541,  -901.61525301]
+    additionalItems: false
+    description: an array of x-coordinates [x0, x1, ...] and y-coordinates [y0, y1, ...] of wind turbine positions in cartesian coordinates
+    units: m
+
+  plant_energy:
+    type: object
+    description: energy production from simplified Bastankhah Gaussian wake model
+
+    properties:
+      wake_model_selection:
+        type: algorithm
+        description: wake model used to calculate AEP
+        items:
+          - $ref: "iea37-aepcalc.py"
+
+      wind_resource_selection:
+        type: object
+        description: specific wind resource used to calculate AEP
+        properties:
+          type: array
+          items:
+            - $ref: "iea37-windrose.yaml"       # Reference for the .yaml containing the wind rose
+
+      annual_energy_production:
+        type: number
+        description: binned and total (default) annual energy production for a wind plant given a layout and binned wind rose
+        binned: [ 9958.56722,  8374.94376, 10883.37965, 13933.49217,
+                  26016.91765, 27035.17255, 40650.12684, 51205.76268,
+                  25423.67676, 13427.41171, 14215.81411, 31620.01857,
+                  88225.95940, 19016.57789, 13061.33434,  9269.60141]
+        default: 402318.7567  # 14.3% wake losses; 20th model call, 0 repulsions
+        units: MWh

@@ -1,0 +1,82 @@
+input_format_version: 0
+title: IEA Wind Task 37 Combined Case Study 64 Turbine Farm
+description: Participant 3's 64 turbine submission
+
+definitions:
+  wind_plant:
+    type: object
+    description: specific plant design including turbine selection and placement
+    properties:
+      layout:
+        type: array
+        items:
+          - $ref: "#/definitions/position"
+          - $ref: "iea37-335mw.yaml"    # Reference for the .yaml containing turbine attributes.
+
+  position:
+    type: array
+    items:
+      xc: [ -523.6359234 ,   820.27451404,   379.27947647,  -408.24761484,
+            -290.29349508,   277.50320417,  1640.84747714,  1295.67407656,
+              95.04715295,   624.75102246,  -801.25110293, -1371.21998031,
+           -1909.74352549, -1752.19086217, -1157.56699947,  -374.99389617,
+             944.61333872,  1083.95444313,  2140.81122947,  2849.8864226 ,
+            1800.52696573,  1470.96978035,   296.98084433,  -657.59845338,
+           -1478.51423262, -2363.05203241, -2415.22687609, -2307.15672002,
+           -2519.1333818 , -2163.7294684 , -1242.44140912,  -205.85676608,
+             515.66761419,  1455.35053362,  2240.34126731,  2455.09901709,
+            2999.71098478,  2962.16911948,  2701.81226008,  2388.75234575,
+            1704.09417247,  1368.09686012,   729.58956114,  -192.62174235,
+            -988.63088482, -1609.19672031, -2113.71593855, -2143.4634232 ,
+           -2689.89983937, -2821.41360582, -2994.34392035, -2889.813641  ,
+           -2776.45761091, -2353.46226837, -2011.42140254, -1345.42416641,
+            -741.64220533,   135.46172123,   669.36192352,  1208.88748042,
+            1968.12832181,  2409.62236026,  2598.86576595,  2865.74490128]
+      yc: [  256.42353136,  -646.12933017,    41.72055521,   980.22141993,
+            -788.56440091,  -336.72215931,  -164.47681731,  1148.67168268,
+            1928.99143841,  1595.36179112,  1258.77134808,   512.12539923,
+             396.75061612, -1292.84583399,  -499.40294765, -1408.84655471,
+           -1627.96333034, -1036.2781558 ,   546.16861698,   897.13174641,
+            1034.83573539,  2069.94633471,  2899.80539562,  2352.09704254,
+            1667.90579369,  1829.46085748,  1132.9244957 ,  -849.70018635,
+             -98.92629249, -1552.01450849, -2093.47804414, -2459.83304408,
+           -1881.82233466, -2357.93118738, -1995.21202031, -1225.85687164,
+             -41.64141937,   330.42444373,  1303.92120593,  1806.57505882,
+            2437.60117939,  2669.8896946 ,  2263.57347033,  2993.80975755,
+            2832.42104455,  2498.04326527,  2128.89758587,  1478.63291015,
+            1328.32181874,   871.564211  ,   184.13171007,  -667.93859915,
+           -1136.34639737, -1788.22136508, -2225.79961843, -2681.38654663,
+           -2839.48633986, -2996.94012654, -2908.93422627, -2745.64947866,
+           -2249.91134373, -1756.5595047 , -1498.63161937,  -737.57434179]
+    additionalItems: false
+    description: an array of x-coordinates [x0, x1, ...] and y-coordinates [y0, y1, ...] of wind turbine positions in cartesian coordinates
+    units: m
+
+  plant_energy:
+    type: object
+    description: energy production from simplified Bastankhah Gaussian wake model
+
+    properties:
+      wake_model_selection:
+        type: algorithm
+        description: wake model used to calculate AEP
+        items:
+          - $ref: "iea37-aepcalc.py"
+
+      wind_resource_selection:
+        type: object
+        description: specific wind resource used to calculate AEP
+        properties:
+          type: array
+          items:
+            - $ref: "iea37-windrose.yaml"       # Reference for the .yaml containing the wind rose
+
+      annual_energy_production:
+        type: number
+        description: binned and total (default) annual energy production for a wind plant given a layout and binned wind rose
+        binned: [ 36041.56696,  33443.98386,  38771.52863,  50810.41549,
+                  96287.92118,  92540.02900, 146165.15265, 177475.09340,
+                  91637.94562,  52621.24174,  51532.40734, 116045.77831,
+                  328568.12810,  65495.32202,  45940.58327,  31698.51085]
+        default: 1455075.60842  # 22.5% wake losses; 40th model call, 17 repulsions
+        units: MWh

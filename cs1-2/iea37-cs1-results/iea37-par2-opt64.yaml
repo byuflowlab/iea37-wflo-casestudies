@@ -1,0 +1,52 @@
+input_format_version: 0
+title: IEA Wind Task 37 Combined Case Study 64 Turbine Farm
+description: Participant 2's 64 turbine wind plant model for IEA Task 37 Combined Case Study
+
+definitions:
+  wind_plant:
+    type: object
+    description: specific plant design including turbine selection and placement
+    properties:
+      layout:
+        type: array
+        items:
+          - $ref: "#/definitions/position"
+          - $ref: "iea37-335mw.yaml"    # Reference for the .yaml containing turbine attributes.
+
+  position:
+    type: array
+    items:
+      xc: [168.9370, 467.4869, -518.9161, -704.4885, 335.1467, 925.7533, 806.4866, -27.0051, -918.6787, -1224.6993, -1392.6853, -1294.8877, -615.3124, -17.2297, 1137.6915, 1319.3735, 1497.7069, 1398.9888, 1198.1013, 600.1619, -190.0965, -1309.6030, -1624.6247, -2107.5089, -2236.5867, -2348.6734, -1679.6955, -1029.0408, -395.3392, 536.8344, 1495.0819, 1982.2443, 2071.4525, 2202.7884, 2351.4136, 1771.4479, 1587.5723, 996.7123, 442.7344, -342.2795, -1082.4421, -1751.9345, -1958.8692, -2551.0895, -2850.8745, -2996.2352, -2937.5355, -2811.4899, -2471.0352, -2113.0501, -1460.9364, -834.8273, -231.2660, 689.3132, 1388.1812, 1871.4259, 2110.0559, 2581.5938, 2790.9941, 2979.6833, 2899.1965, 2790.5515, 2483.5493, 2171.3484]
+      yc: [272.0471, 707.4649, 436.8730, -337.8905, -1084.9931, 64.3894, 1254.9264, 1363.0861, 1085.1388, 593.3599, -192.6664, -741.4595, -1210.9539, -1621.8007, -1268.8465, -545.2437, 164.8056, 922.3588, 1854.0506, 2229.7063, 2036.7147, 1728.0267, 1215.1163, 779.9713, -24.1676, -909.2714, -1374.9703, -1815.2371, -2210.5993, -1992.6941, -1761.6691, -1413.9084, -712.3306, -11.2041, 791.4678, 1478.5306, 2431.0881, 2829.5873, 2967.1512, 2798.6131, 2628.7435, 2435.3081, 2226.5846, 1443.0607, 934.0848, 150.2488, -514.4718, -1046.6731, -1546.5399, -2038.4816, -2459.2042, -2865.3045, -2991.0727, -2808.2966, -2649.9603, -2344.7314, -2132.5253, -1528.1928, -871.1057, -164.0602, 456.2131, 1101.2821, 1631.0858, 2062.6949]
+    additionalItems: false
+    description: an array of x-coordinates [x0, x1, ...] and y-coordinates [y0, y1, ...] of wind turbine positions in cartesian coordinates
+    units: m          
+
+  plant_energy:
+    type: object
+    description: energy production from simplified Bastankhah Gaussian wake model
+
+    properties:
+      wake_model_selection:
+        type: algorithm
+        description: wake model used to calculate AEP
+        items:
+          - $ref: "iea37-aepcalc.py"
+
+      wind_resource_selection:
+        type: object
+        description: specific wind resource used to calculate AEP
+        properties:
+          type: array
+          items:
+            - $ref: "iea37-windrose.yaml"       # Reference for the .yaml containing the wind rose
+
+      annual_energy_production:
+        type: number
+        description: binned and total (default) annual energy production for a wind plant given a layout and binned wind rose
+        binned: [ 37028.33251, 34929.99910, 41850.12424, 53439.47572, 
+                  97822.02392, 95656.99633, 150108.08528, 184747.95240,
+                  93481.43966, 55912.96134, 56247.68326, 124212.58504, 
+                  331911.62337, 68308.41743, 47871.91575, 32858.79978]
+        default: 1506388.41513
+        units: MWh

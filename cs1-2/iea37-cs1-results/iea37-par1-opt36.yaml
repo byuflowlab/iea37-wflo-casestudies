@@ -1,0 +1,68 @@
+input_format_version: 0
+title: IEA Wind Task 37 Optimization Only Case Study 36 Turbine Farm
+description: Participant 1's 36 turbine submission
+
+definitions:
+  wind_plant:
+    type: object
+    description: specific plant design including turbine selection and placement
+    properties:
+      layout:
+        type: array
+        items:
+          - $ref: "#/definitions/position"
+          - $ref: "iea37-335mw.yaml"    # Reference for the .yaml containing turbine attributes.
+
+  position:
+    type: array
+    items:
+      xc: [ -612.6193037,  1955.039188 , -1028.176612 , -1912.481191 ,
+            1609.1211213,  1828.1050455,   373.1311498,  -881.5296913,
+            -1797.3615486,    23.3437087,  1589.1926829, -1985.4829174,
+            -117.7979248,   724.5957627, -1814.8995043,  -770.7191117,
+            456.9535015,     6.6910003,   725.4401235,   177.2349355,
+            -310.2348191,  -558.6754101,   583.1009017,   611.6167999,
+            -723.57281  ,  1478.2409311,  1220.2303983, -1231.0783912,
+            1342.5162356, -1512.1773344,  1024.5850795, -1120.172261 ,
+            1616.1495474,  1218.6749242, -1697.1619645,  1462.4819887]
+      yc: [-1045.7518361,  -421.6893452,  -415.610949 ,  -261.5903086,
+            1187.7412364,  -811.1917254,  1964.8850374,   -41.0312874,
+            -877.2066293, -1999.8637685,   875.6844293,   240.5360579,
+            789.6167667,   144.608259 ,   621.5944243, -1836.5233787,
+            -206.0232584,  1390.377149 , -1863.796297 ,  -622.9042824,
+            1808.8440107,   445.8837371, -1188.4427808,  1005.6957744,
+            1235.3086283,   315.5961828, -1584.6254393,  1576.2125478,
+            -4.5021223,  1107.3540956,  1596.2613973, -1360.0573308,
+            -1031.0287005,   609.737134 ,   924.650273 , -1357.1651993]
+    additionalItems: false
+    description: Andrew PJ Stanley optimal x y turbine locations
+    units: m
+
+  plant_energy:
+    type: object
+    description: energy production from simplified Bastankhah Gaussian wake model
+
+    properties:
+      wake_model_selection:
+        type: algorithm
+        description: wake model used to calculate AEP
+        items:
+          - $ref: "iea37-aepcalc.py"
+
+      wind_resource_selection:
+        type: object
+        description: specific wind resource used to calculate AEP
+        properties:
+          type: array
+          items:
+            - $ref: "iea37-windrose.yaml"       # Reference for the .yaml containing the wind rose
+
+      annual_energy_production:
+        type: number
+        description: binned and total (default) annual energy production for a wind plant given a layout and binned wind rose
+        binned: [ 20689.59901167,  17272.41759227,  21471.51021794,  29667.40470858,
+                  56605.65929575,  56326.78758832,  82534.60190029, 106268.9519697 ,
+                  51501.42093638,  27722.61934217,  29235.30101563,  68975.43890681,
+                  190652.19015014,  39952.51552034,  26156.70906223,  19248.03364155]
+        default: 844281.1608597545
+        units: MWh

@@ -1,0 +1,52 @@
+input_format_version: 0
+title: IEA Wind Task 37 Combined Case Study 16 Optimized Turbine Farm
+description: Participant 12's 16 turbine submission
+
+definitions:
+  wind_plant:
+    type: object
+    description: specific plant design including turbine selection and placement
+    properties:
+      layout:
+        type: array
+        items:
+          - $ref: "#/definitions/position"
+          - $ref: "iea37-335mw.yaml"    # Reference for the .yaml containing turbine attributes.
+
+  position:
+    type: array
+    items:
+      xc: [-174.37, 659.783, 171.231, -1135.68, -332.401, 496.391, 1292.68, 4.26257, -1287.44, -488.119, 333.015, 1141.13, -974.673, 649.343, -660.323, 158.797]
+      yc: [-1285.31, -1119.06, -814.408, -625.373, -474.862, -315.01, -157.583, 2.15526, 163.296, 321.055, 475.836, 630.065, 653.442, 947.733, 1120.87, 1293.17]
+    additionalItems: false
+    description: an array of x-coordinates [x0, x1, ...] and y-coordinates [y0, y1, ...] of wind turbine positions in cartesian coordinates
+    units: m          
+
+  plant_energy:
+    type: object
+    description: energy production from simplified Bastankhah Gaussian wake model
+
+    properties:
+      wake_model_selection:
+        type: algorithm
+        description: wake model used to calculate AEP
+        items:
+          - $ref: "iea37-aepcalc.py"
+
+      wind_resource_selection:
+        type: object
+        description: specific wind resource used to calculate AEP
+        properties:
+          type: array
+          items:
+            - $ref: "iea37-windrose.yaml"       # Reference for the .yaml containing the wind rose
+
+      annual_energy_production:
+        type: number
+        description: binned and total (default) annual energy production for a wind plant given a layout and binned wind rose
+        binned: [ 28224.316447150897, 27559.033199236514, 25656.292893792037, 28442.173170720187,
+                  26092.4291582684,   26537.898725857387, 27598.27988655215,  24266.956371903943,
+                  27655.258059469747, 25674.92013568832,  26229.53307303252,  25649.80525497577,
+                  24575.27055004118,  24475.02471661694,  26758.04173653184,  26166.66377082421]
+        default: 421561.89715066205
+        units: MWh
