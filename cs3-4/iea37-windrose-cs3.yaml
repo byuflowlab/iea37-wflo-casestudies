@@ -1,6 +1,6 @@
 title: IEA Wind Task 37 Wind Plant Ontology version 0.1
 description: Wind resource conditions for a IEA37 WFLO case studies 3 and 4.
-              Template located at <https://github.com/IEAWindTask37/ontology/blob/master/plant_energy_inflow_lookup.yaml>
+              Template located in branch of <https://github.com/IEAWindTask37/ontology/tree/master/plant>
 
 definitions:
   wind_inflow:

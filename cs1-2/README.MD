@@ -7,4 +7,4 @@ Please begin by reading [iea37-wflocs-announcement.pdf](https://github.com/byufl
 
 That document describes participation in the studies and intended use of the other files in this directory.
 
-Any questions or feedback should be directed to Nicholas.F.Baker@Byu.edu
+If you are thinking about perticipating, or have have begun a submission, you must contact me at Nicholas.F.Baker@Byu.edu so I am able to track an coordinate all participation.
